@@ -1,0 +1,7 @@
+In order to use LDAP authentication, we need to install the python-ldap module:
+
+    pip install python-ldap
+
+On ubuntu this won't work without several other packages:
+
+    sudo apt-get install libldap2-dev, libsasl2-dev
