@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 
 class Student(User):
     '''Model for all of our users, inheriting Django's built-in User model'''
@@ -9,12 +8,28 @@ class Student(User):
     is_current_student = models.BooleanField(default=True)
 
 
+class Instructor(models.Model):
+    '''Model for a course instructor.'''
+    name = models.CharField(max_length=200)
+
+
+class Department(models.Model):
+    '''Model for an academic department.'''
+    name = models.CharField(max_length=200)
+    # Official Abbreviation
+    abb = models.CharField(max_length=10)
+
+
 class Course(models.Model):
     '''Model for a given course'''
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
+    # TODO: Determine whether it makes more sense to have this or a ManyToMany on Class
     instructor = models.ManyToManyField(Instructor, through='Class')
-    
+    department = models.ForeignKey(Department, blank=False)
+    number = models.IntegerField()
+    ccn = models.IntegerField(blank=True,null=True)
+
 
 class Class(models.Model):
     '''A class is a specific instance of a course.'''
@@ -23,8 +38,8 @@ class Class(models.Model):
         ('Spring', 'Spring'),
         ('Summer', 'Summer'),
     )
-    course = models.ForeignKey(Course, blank=False)
-    instructor = models.Foreignkey(Instructor, blank=False)
+    course = models.ForeignKey(Course)
+    instructor = models.ForeignKey(Instructor)
     year = models.IntegerField()
     semester = models.CharField(max_length=6, choices=SEMESTER_CHOICES)
 
@@ -32,13 +47,11 @@ class Class(models.Model):
 class Review(models.Model):
     '''Model for a single person's review of a course'''
     author = models.ForeignKey(Student, blank=True, null=True, on_delete=models.SET_NULL)
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Class)
     
     content = models.TextField(blank=True,null=True)
     is_anonymous = models.BooleanField(default=False)
+    thumbs_up = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
 
-class Instructor(models.Model):
-    '''Model for a course instructor.'''
-    name = models.CharField(max_length=200)
