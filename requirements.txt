@@ -1,2 +1,4 @@
 django
 python-ldap
+south
+django_auth_ldap
