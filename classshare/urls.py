@@ -4,9 +4,10 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'classshare.views.home', name='home'),
-    # url(r'^classshare/', include('classshare.foo.urls')),
+    url(r'^$', 'reviews.views.home', name='home'),
+    url(r'^courses/$', 'reviews.views.courses', name='courses'),
+    url(r'^courses/(?P<course_id>\d+)/$', 'reviews.views.course', name="course"),
+    
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
