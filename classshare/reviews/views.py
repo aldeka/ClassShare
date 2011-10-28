@@ -11,4 +11,4 @@ def courses(request):
     
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
-    return render_to_response('reviews/course.html', {'course': course})
+    return render_to_response('reviews/single_course.html', {'course': course})
