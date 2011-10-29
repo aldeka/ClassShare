@@ -52,6 +52,16 @@ class Course(models.Model):
     
     def __unicode__(self):
         return self.course_code()
+        
+    def thumbs_count(self):
+        '''Calculates how many thumbs-up the course has received'''
+        thumbs = 0
+        classes = self.class_set.all()
+        for the_class in classes:
+            pos_reviews = the_class.review_set.filter
+            thumbs = thumbs + len(pos_reviews)
+        return thumbs
+        
 
 class Class(models.Model):
     '''A class is a specific instance of a course.'''
