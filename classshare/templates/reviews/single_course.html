@@ -1,5 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Course: {{course.name}}</h2>
+<h2>Course: {{ course.course_code }}</h2>
+
+<h3>Details</h3>
+Full name: {{ course.name }}
+Department: {{ course.department.name }}
+Description: {{ course.description }}
+Tags: {% for tag in course.tags %}{{tag.name}} {% endfor %}
+
+<h3>Reviews</h3>
+{% for class in course.class_set.all %}
+    {% for review in class.review_set.all %}
+        <div id="review-{{ review.pk }}" class="review">
+            <div class="review-head">
+            {% if review.is_anonymous %}Anonymous{% else %}{{ review.author.name }}{% endif %} reviewed the {{ review.class.semester_formatted }} offering of {{ course.course_code }}:
+            </div>
+            <div class="review-content">
+            {{ review.content }}
+            </div>
+        </div>
+    {% endfor %}
+{% endfor %}
+
 {% endblock content %}
