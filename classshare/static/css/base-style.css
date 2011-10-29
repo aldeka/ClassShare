@@ -1,11 +1,58 @@
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
     font-size: 12pt;
     font-family: Goudy, Palatino, 'Liberation Serif', serif;
-    background: white;
+    background: #003376;
+    color: #001032;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: #976311;
+}
+
+a:hover, a:active {
+    color: #D2981A;
 }
 
 h1, h2, h3 {
-    font-family: Helvetica, Verdana, sans-serif;
+    font-family: Summersby, Helvetica, Verdana, sans-serif;
+    margin: 0;
+}
+
+#container {
+    width: 940px;
+    padding: 5px 20px 20px 20px;
+    margin: 0 auto;
+    background: rgba(255,255,255,.85);
+}
+
+#header {
+    height: 80px;
+    width: 100%;
+    border-bottom: 2pt solid #003376;
+}
+
+#title {
+    float: left;
+}
+
+#subtitle {
+    font-style: italic;
+}
+
+#account-links {
+    float: right;
+}
+
+#content {
+    clear: both;
+    padding-top: 10px;
+    }
+    
+#splash {
+    font-size: 1.4em;
+    padding: 0 30px;
 }

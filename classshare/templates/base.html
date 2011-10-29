@@ -2,14 +2,29 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-        {% block css %}{% endblock css %}
-        {% block js %} {% endblock js %}
+        
+        {% load static %}
+        {% get_static_prefix as STATIC_PREFIX %}
+        
+        {% block css %}
+        <link href="{{ STATIC_PREFIX }}css/base-style.css" rel="stylesheet" type="text/css" />
+        {% endblock css %}
+        
+        {% block js %}
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+        {% endblock js %}
     </head>
+    
     <body>
         <div id="container">
             <div id="header">
-            <h1>ClassShare</h1>
+                <div id="title">
+                <h1><a href="/">ClassShare</a></h1>
+                <span id="subtitle">You're at UC Berkeley. Time to take advantage of it!</span>
+                </div>
+                <div id="account-links">
+                <a href="#">Log in</a>
+                </div>
             </div>
             <div id="content">
             {% block content %}
