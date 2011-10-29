@@ -1,39 +1,33 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+import datetime
 
 class Student(User):
     '''Model for all of our users, inheriting Django's built-in User model'''
     # TODO: Make LDAP connect to this thing
-    is_current_student = models.BooleanField(default=True)
-
+    is_alumnus = models.BooleanField(default=False)
 
 class Instructor(models.Model):
     '''Model for a course instructor.'''
     name = models.CharField(max_length=200)
 
-
 class Department(models.Model):
     '''Model for an academic department.'''
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, blank=True,null=True)
     # Official Abbreviation
     abb = models.CharField(max_length=10)
 
 class Tag(models.Model):
+    '''Model for a tag'''
     name = models.CharField(max_length=200)
-
 
 class Course(models.Model):
     '''Model for a given course'''
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
-    department = models.ForeignKey(Department, blank=False)
-    number = models.IntegerField()
-    ccn = models.IntegerField(blank=True,null=True)
-    # TODO: Determine whether it makes more sense to have this or a ManyToMany on Class
-    instructor = models.ManyToManyField(Instructor, through='Class')
-    tag = models.ManyToManyField(Tag)    
-
+    department = models.ForeignKey(Department)
+    number = models.CharField(max_length=12)
+    tags = models.ManyToManyField(Tag, blank=True, null=True)
 
 class Class(models.Model):
     '''A class is a specific instance of a course.'''
@@ -43,15 +37,25 @@ class Class(models.Model):
         ('Summer', 'Summer'),
     )
     course = models.ForeignKey(Course)
-    instructor = models.ForeignKey(Instructor)
+    instructor = models.ForeignKey(Instructor, blank=True, null=True)
     year = models.IntegerField()
+    ccn = models.IntegerField(blank=True,null=True)
     semester = models.CharField(max_length=6, choices=SEMESTER_CHOICES)
-
+    
+    def semester2date(self):
+        '''Returns a datetime for the rough beginning date of the class' semester'''
+        # default value is 8, for August
+        month = 8
+        if self.semester == 'Spring':
+            month = 1
+        elif self.semester == 'Summer':
+            month = 5
+        return datetime.date(self.year, month, 15)
 
 class Review(models.Model):
     '''Model for a single person's review of a course'''
     author = models.ForeignKey(Student, blank=True, null=True, on_delete=models.SET_NULL)
-    course = models.ForeignKey(Class)
+    reviewed_class = models.ForeignKey(Class)
     
     content = models.TextField(blank=True,null=True)
     is_anonymous = models.BooleanField(default=False)
