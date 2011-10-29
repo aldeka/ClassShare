@@ -23,12 +23,18 @@ class Department(models.Model):
     # Official Abbreviation
     abb = models.CharField(max_length=10)
     
+    class Meta:
+        ordering = ['abb']
+    
     def __unicode__(self):
         return self.abb + ' department'
 
 class Tag(models.Model):
     '''Model for a tag'''
     name = models.CharField(max_length=200)
+    
+    class Meta:
+        ordering = ['name']
     
     def __unicode__(self):
         return 'Tag: ' + self.name
@@ -41,8 +47,11 @@ class Course(models.Model):
     number = models.CharField(max_length=12)
     tags = models.ManyToManyField(Tag, blank=True, null=True)
     
-    def __unicode__(self):
+    def course_code(self):
         return self.department.abb + ' ' + self.number
+    
+    def __unicode__(self):
+        return self.course_code()
 
 class Class(models.Model):
     '''A class is a specific instance of a course.'''
@@ -56,6 +65,9 @@ class Class(models.Model):
     year = models.IntegerField()
     ccn = models.IntegerField(blank=True,null=True)
     semester = models.CharField(max_length=6, choices=SEMESTER_CHOICES)
+    
+    class Meta:
+        ordering = ['-year']
     
     def semester_formatted(self):
         '''Returns a nicely formatted semester string, e.g. "Fall 2008"'''
@@ -83,6 +95,9 @@ class Review(models.Model):
     is_anonymous = models.BooleanField(default=False)
     thumbs_up = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-timestamp']
     
     def __unicode__(self):
         return author.name + "'s review of " + self.reviewed_class
