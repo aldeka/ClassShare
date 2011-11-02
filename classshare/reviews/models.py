@@ -45,10 +45,7 @@ class Course(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
     department = models.ForeignKey(Department, blank=False)
-    number = models.IntegerField()
     ccn = models.IntegerField(blank=True,null=True)
-    tag = models.ManyToManyField(Tag)    
-    department = models.ForeignKey(Department)
     number = models.CharField(max_length=12)
     tags = models.ManyToManyField(Tag, blank=True, null=True)
     
@@ -104,7 +101,6 @@ class Class(models.Model):
 class Review(models.Model):
     '''Model for a single person's review of a course'''
     author = models.ForeignKey(Student, blank=True, null=True, on_delete=models.SET_NULL)
-    course = models.ForeignKey(Class)    
     reviewed_class = models.ForeignKey(Class)
     content = models.TextField(blank=True,null=True)
     is_anonymous = models.BooleanField(default=False)
