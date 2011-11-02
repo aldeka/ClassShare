@@ -19,7 +19,9 @@ class Department(models.Model):
     # Official Abbreviation
     abb = models.CharField(max_length=10)
 
+
 class Tag(models.Model):
+    '''Model for a user's tag for a course.'''
     name = models.CharField(max_length=200)
 
 
@@ -30,8 +32,6 @@ class Course(models.Model):
     department = models.ForeignKey(Department, blank=False)
     number = models.IntegerField()
     ccn = models.IntegerField(blank=True,null=True)
-    # TODO: Determine whether it makes more sense to have this or a ManyToMany on Class
-    instructor = models.ManyToManyField(Instructor, through='Class')
     tag = models.ManyToManyField(Tag)    
 
 
@@ -51,8 +51,7 @@ class Class(models.Model):
 class Review(models.Model):
     '''Model for a single person's review of a course'''
     author = models.ForeignKey(Student, blank=True, null=True, on_delete=models.SET_NULL)
-    course = models.ForeignKey(Class)
-    
+    course = models.ForeignKey(Class)    
     content = models.TextField(blank=True,null=True)
     is_anonymous = models.BooleanField(default=False)
     thumbs_up = models.BooleanField(default=False)
