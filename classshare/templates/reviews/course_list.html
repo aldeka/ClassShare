@@ -4,7 +4,7 @@
 <h2>Courses:<h2>
 <ul>
     {% for course in courses %}
-        <li><a href="/{{course.pk}}/">{{ course.course_code }} -- {{ course.name }}</a></li>
+        <li><a href="/courses/{{course.pk}}/">{{ course.course_code }} -- {{ course.name }}</a></li>
     {% endfor %}
 </ul>
 {% endblock content %}
