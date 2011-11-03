@@ -20,8 +20,8 @@ class Instructor(models.Model):
 class Department(models.Model):
     '''Model for an academic department.'''
     name = models.CharField(max_length=200, blank=True,null=True)
-    # Official Abbreviation
-    abb = models.CharField(max_length=10)
+    # Official Abbreviation, also used as primary key
+    abb = models.CharField(max_length=10, primary_key=True)
     # Link to official site
     link = models.URLField(null=True, blank=True)
     

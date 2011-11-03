@@ -7,7 +7,7 @@
 Full name: {{ course.name }}
 Description: {{ course.description }}
 Department: <a href="/depts/{{ course.department.abb }}/">{{ course.department.name }}</a>
-Tags: {% for tag in course.tags %}<a href="/tags/{{tag.name}}/">{{tag.name}}</a> {% endfor %}
+Tags: {% for tag in course.tags.all %}<a href="/tags/{{tag.name}}/">{{tag.name}}</a> {% endfor %}
 Thumbs-up: {{ course.thumb_count }}
 
 <h3>Reviews</h3>
