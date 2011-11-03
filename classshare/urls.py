@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^courses/$', 'reviews.views.courses', name='courses'),
     url(r'^courses/(?P<course_id>\d+)/$', 'reviews.views.course', name="course"),
     url(r'^depts/(?P<dept_abb>\w+)/$', 'reviews.views.department', name='department'),
+    url(r'^instructors/(?P<instructor_id>\d+)/$', 'reviews.views.instructor', name='instructor'),
     
 
     # Uncomment the admin/doc line below to enable admin documentation:

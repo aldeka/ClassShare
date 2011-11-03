@@ -88,7 +88,7 @@ class Class(models.Model):
         return self.semester + ' ' + str(self.year)
     
     def __unicode__(self):
-        return self.course + ': ' + self.semester_formatted()
+        return self.course.course_code() + ': ' + self.semester_formatted()
     
     def semester2date(self):
         '''Returns a datetime for the rough beginning date of the class' semester'''
