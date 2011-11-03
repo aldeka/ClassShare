@@ -1,4 +1,17 @@
-test = "I'm testing!"
+#!/usr/local/bin/python
+
+"""
+Load department data into Django database.
+
+Can be run as a Python script from the command line, i.e.
+
+>python deptscript.py.
+"""
+
+import os
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
+
 from reviews.models import Department
 
 def SetDepartments():
@@ -170,6 +183,8 @@ def SetDepartments():
     ['Undergraduate and Interdisciplinary Studies', 'UGIS', 'http://ls.berkeley.edu/divisions/undergrad/ugis.html']]
 
     for dept in deptlist:
-        d = Department(name=dept[0], abb=dept[1], link=dept[2])
-        d.save()
-        #print d.name
+        # Use get_or_create to avoid duplicating existing entries.
+        Department.objects.get_or_create(name=dept[0], abb=dept[1], link=dept[2])
+
+if __name__ == "__main__":
+    SetDepartments()
