@@ -22,6 +22,8 @@ class Department(models.Model):
     name = models.CharField(max_length=200, blank=True,null=True)
     # Official Abbreviation
     abb = models.CharField(max_length=10)
+    # Link to official site
+    link = models.URLField(null=True, blank=True)
     
     class Meta:
         ordering = ['abb']
