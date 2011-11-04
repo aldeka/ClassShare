@@ -40,5 +40,5 @@ def instructor(request, instructor_id):
 
 def tags(request):
     tags = Tag.objects.all()
-    return render_to_response('reviews/tag_list.html'{'tags':tags})
+    return render_to_response('reviews/tag_list.html',{'tags':tags})
 
