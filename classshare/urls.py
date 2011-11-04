@@ -7,7 +7,8 @@ urlpatterns = patterns('',
     url(r'^$', 'reviews.views.home', name='home'),
     url(r'^courses/$', 'reviews.views.courses', name='courses'),
     url(r'^courses/(?P<course_id>\d+)/$', 'reviews.views.course', name="course"),
-    url(r'^depts/(?P<dept_abb>\w+)/$', 'reviews.views.department', name='department'),
+    url(r'^depts/$', 'reviews.views.departments', name='departments'),  
+    url(r'^depts/(?P<dept_abb>[\w,\s]+)/$', 'reviews.views.department', name='department'),
     url(r'^instructors/(?P<instructor_id>\d+)/$', 'reviews.views.instructor', name='instructor'),
     
 

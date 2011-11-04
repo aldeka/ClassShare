@@ -11,7 +11,15 @@ def courses(request):
     
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+    instructors = set()
+    for reviewed_class in course.class_set.all():
+        instructors.add(reviewed_class.instructor)
+    course.instructors = list(instructors)
     return render_to_response('reviews/single_course.html', {'course': course})
+
+def departments(request):
+    departments = Department.objects.all()
+    return render_to_response('reviews/department_list.html', {'departments': departments})
 
 def department(request, dept_abb):
     dept_abb = dept_abb.upper()

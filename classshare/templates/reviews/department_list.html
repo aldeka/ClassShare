@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Departments:<h2>
+<ul>
+    {% for department in departments %}
+        <li><a href="/depts/{{department.abb}}/">{{ department.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}
