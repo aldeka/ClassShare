@@ -45,7 +45,6 @@ def tags(request):
 def tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
     courses = set()
-    for reviewed_class in tag.class_set.all():
-        courses.add(reviewed_class.course)
+    courses = tag.course_set.all()
     tag.courses = list(courses)
     return render_to_response('reviews/single_tag.html', {'tag': tag})
