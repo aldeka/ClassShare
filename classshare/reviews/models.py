@@ -5,10 +5,11 @@ import datetime
 class Student(User):
     '''Model for all of our users, inheriting Django's built-in User model'''
     # TODO: Make LDAP connect to this thing
+    
     is_alumnus = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return self.name
+        return self.username
 
 class Instructor(models.Model):
     '''Model for a course instructor.'''

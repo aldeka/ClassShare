@@ -9,7 +9,13 @@ urlpatterns = patterns('',
     url(r'^courses/(?P<course_id>\d+)/$', 'reviews.views.course', name="course"),
     url(r'^depts/$', 'reviews.views.departments', name='departments'),  
     url(r'^depts/(?P<dept_abb>[\w,\s]+)/$', 'reviews.views.department', name='department'),
+    url(r'^instructors/$', 'reviews.views.instructors', name='instructors'),     
     url(r'^instructors/(?P<instructor_id>\d+)/$', 'reviews.views.instructor', name='instructor'),
+    url(r'^tags/$', 'reviews.views.tags', name='tags'),
+    url(r'^tags/(?P<tag_id>\d+)/$', 'reviews.views.tag', name='tag'),
+    url(r'^allreviews/$', 'reviews.views.reviews', name='reviews'),
+	url(r'^students/$', 'reviews.views.students', name='students'),     
+    url(r'^students/(?P<student_id>\d+)/$', 'reviews.views.student', name='student'),
     
 
     # Uncomment the admin/doc line below to enable admin documentation:

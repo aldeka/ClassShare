@@ -26,6 +26,10 @@ def department(request, dept_abb):
     dept = get_object_or_404(Department, pk=dept_abb)
     return render_to_response('reviews/single_department.html', {'department': dept})
 
+def instructors(request):
+    instructors = Instructor.objects.all()
+    return render_to_response('reviews/instructor_list.html', {'instructors': instructors})
+
 def instructor(request, instructor_id):
     instructor = get_object_or_404(Instructor, pk=instructor_id)
     courses = set()
@@ -33,3 +37,30 @@ def instructor(request, instructor_id):
         courses.add(reviewed_class.course)
     instructor.courses = list(courses)
     return render_to_response('reviews/single_instructor.html', {'instructor': instructor})
+
+def tags(request):
+    tags = Tag.objects.all()
+    return render_to_response('reviews/tag_list.html',{'tags':tags})
+
+def tag(request, tag_id):
+    tag = get_object_or_404(Tag, pk=tag_id)
+    courses = set()
+    courses = tag.course_set.all()
+    tag.courses = list(courses)
+    return render_to_response('reviews/single_tag.html', {'tag': tag})
+
+def reviews(request):
+    reviews = Review.objects.all()
+    return render_to_response('reviews/review_list.html', {'reviews':reviews})
+
+def students(request):
+    students = Student.objects.all()
+    return render_to_response("reviews/student_list.html",{'students':students})
+
+def student(request, student_id):
+    student = get_object_or_404(Student, pk=student_id)
+    courses = set()
+    for reviewed_class in student.review_set.all():
+        courses.add(reviewed_class.course)
+    student.courses = list(courses)
+    return render_to_response('reviews/single_student.html', {'student': student})
