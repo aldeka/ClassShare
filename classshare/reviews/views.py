@@ -60,7 +60,7 @@ def students(request):
 def student(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
     courses = set()
-    for reviewed_class in student.class_set.all():
+    for reviewed_class in student.review_set.all():
         courses.add(reviewed_class.course)
     student.courses = list(courses)
     return render_to_response('reviews/single_student.html', {'student': student})
