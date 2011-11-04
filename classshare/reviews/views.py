@@ -50,5 +50,5 @@ def tag(request, tag_id):
     return render_to_response('reviews/single_tag.html', {'tag': tag})
 
 def reviews(request):
-    reviews = Reviews.objects.all()
+    reviews = Review.objects.all()
     return render_to_response('reviews/reviews_list.html', {'reviews':reviews})
