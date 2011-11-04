@@ -38,7 +38,7 @@ def instructor(request, instructor_id):
     instructor.courses = list(courses)
     return render_to_response('reviews/single_instructor.html', {'instructor': instructor})
 
-#def tags(request):
-    #tags = Tag.objects.all()
-   # return render_to_response('reviews/tag_list.html'{'tags':tags})
+def tags(request):
+    tags = Tag.objects.all()
+    return render_to_response('reviews/tag_list.html'{'tags':tags})
 
