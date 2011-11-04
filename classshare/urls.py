@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^instructors/$', 'reviews.views.instructors', name='instructors'),     
     url(r'^instructors/(?P<instructor_id>\d+)/$', 'reviews.views.instructor', name='instructor'),
     url(r'^tags/$', 'reviews.views.tags', name='tags'),
+    url(r'^tags/(P<tag_id>\d+)/$', 'reviews.views.tag', name='tag'),
     
 
     # Uncomment the admin/doc line below to enable admin documentation:
