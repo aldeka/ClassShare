@@ -52,3 +52,15 @@ def tag(request, tag_id):
 def reviews(request):
     reviews = Review.objects.all()
     return render_to_response('reviews/review_list.html', {'reviews':reviews})
+
+def students(request):
+    students = Student.objects.all()
+    return render_to_response("reviews/student_list.html",{'students':students})
+
+def student(request, student_id):
+    student = get_object_or_404(Student, pk=student_id)
+    courses = set()
+    for reviewed_class in student.class_set.all():
+        courses.add(reviewed_class.course)
+    student.courses = list(courses)
+    return render_to_response('reviews/single_student.html', {'student': student})
