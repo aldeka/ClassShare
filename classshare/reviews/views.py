@@ -48,3 +48,7 @@ def tag(request, tag_id):
     courses = tag.course_set.all()
     tag.courses = list(courses)
     return render_to_response('reviews/single_tag.html', {'tag': tag})
+
+def reviews(request):
+    reviews = Reviews.objects.all()
+    return render_to_response('reviews/reviews_list.html', {'reviews':reviews})
