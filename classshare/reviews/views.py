@@ -51,4 +51,4 @@ def tag(request, tag_id):
 
 def reviews(request):
     reviews = Review.objects.all()
-    return render_to_response('reviews/reviews_list.html', {'reviews':reviews})
+    return render_to_response('reviews/review_list.html', {'reviews':reviews})
