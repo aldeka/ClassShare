@@ -26,6 +26,10 @@ def department(request, dept_abb):
     dept = get_object_or_404(Department, pk=dept_abb)
     return render_to_response('reviews/single_department.html', {'department': dept})
 
+def instructors(request):
+    instructors = Instructor.objects.all()
+    return render_to_response('reviews/instructor_list.html', {'instructors': instructors})
+
 def instructor(request, instructor_id):
     instructor = get_object_or_404(Instructor, pk=instructor_id)
     courses = set()
@@ -33,3 +37,8 @@ def instructor(request, instructor_id):
         courses.add(reviewed_class.course)
     instructor.courses = list(courses)
     return render_to_response('reviews/single_instructor.html', {'instructor': instructor})
+
+def tags(request):
+    tags = Tag.objects.all()
+    return render_to_response('reviews/tag_list.html'{'tags':tags})
+
