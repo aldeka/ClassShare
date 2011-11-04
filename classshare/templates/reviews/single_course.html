@@ -4,10 +4,14 @@
 <h2>Course: {{ course.course_code }}</h2>
 
 <h3>Details</h3>
-Full name: {{ course.name }}
+Full name: {{ course.name }}<br/>
 Description: {{ course.description }}
-Department: <a href="/depts/{{ course.department.abb }}/">{{ course.department.name }}</a>
-Tags: {% for tag in course.tags.all %}<a href="/tags/{{tag.name}}/">{{tag.name}}</a> {% endfor %}
+Department: <a href="/depts/{{ course.department.abb }}/">{{ course.department.name }}</a><br/>
+Instructors:<br/>
+{% for instructor in course.instructors %}
+<a href="/instructors/{{ instructor.pk }}/">{{ instructor.name }}</a><br/>
+{% endfor %}
+Tags: {% for tag in course.tags.all %}<a href="/tags/{{tag.name}}/">{{tag.name}}</a> {% endfor %}<br/>
 Thumbs-up: {{ course.thumb_count }}
 
 <h3>Reviews</h3>

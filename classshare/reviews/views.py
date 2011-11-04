@@ -1,6 +1,6 @@
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
-from reviews.models import Course
+from reviews.models import *
 import re
 
 def home(request):
@@ -34,4 +34,25 @@ def courses(request):
     
 def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
+    instructors = set()
+    for reviewed_class in course.class_set.all():
+        instructors.add(reviewed_class.instructor)
+    course.instructors = list(instructors)
     return render_to_response('reviews/single_course.html', {'course': course})
+
+def departments(request):
+    departments = Department.objects.all()
+    return render_to_response('reviews/department_list.html', {'departments': departments})
+
+def department(request, dept_abb):
+    dept_abb = dept_abb.upper()
+    dept = get_object_or_404(Department, pk=dept_abb)
+    return render_to_response('reviews/single_department.html', {'department': dept})
+
+def instructor(request, instructor_id):
+    instructor = get_object_or_404(Instructor, pk=instructor_id)
+    courses = set()
+    for reviewed_class in instructor.class_set.all():
+        courses.add(reviewed_class.course)
+    instructor.courses = list(courses)
+    return render_to_response('reviews/single_instructor.html', {'instructor': instructor})

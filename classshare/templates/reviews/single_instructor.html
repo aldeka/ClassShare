@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Instructor: {{ instructor.name }}</h2>
+
+<h3>Courses Taught</h3>
+<ul>
+{% for course in instructor.courses %}
+  <li><a href="/courses/{{course.pk}}/">{{ course.department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
+{% endfor %}
+
+{% endblock content %}

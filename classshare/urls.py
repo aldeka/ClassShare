@@ -9,6 +9,9 @@ urlpatterns = patterns('',
     url(r'^courses/add/$', 'reviews.views.add_or_review_course', name='add_or_review_course'),
     url(r'^courses/(?P<course_id>\d+)/$', 'reviews.views.course', name="course"),
     url(r'^courses/(?P<course_id>\d+)/review/$', 'reviews.views.write_new_review', name="write_new_review"),
+    url(r'^depts/$', 'reviews.views.departments', name='departments'),  
+    url(r'^depts/(?P<dept_abb>[\w,\s]+)/$', 'reviews.views.department', name='department'),
+    url(r'^instructors/(?P<instructor_id>\d+)/$', 'reviews.views.instructor', name='instructor'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
