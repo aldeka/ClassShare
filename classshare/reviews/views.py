@@ -1,3 +1,5 @@
+from django.contrib.auth import logout
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from reviews.models import *
 
@@ -64,3 +66,8 @@ def student(request, student_id):
         courses.add(reviewed_class.course)
     student.courses = list(courses)
     return render_to_response('reviews/single_student.html', {'student': student})
+
+def logout_page(request):
+    """Log users out and re-direct them to the login page."""
+    logout(request)
+    return HttpResponseRedirect('/login')

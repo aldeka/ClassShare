@@ -16,6 +16,10 @@ urlpatterns = patterns('',
     url(r'^allreviews/$', 'reviews.views.reviews', name='reviews'),
 	url(r'^students/$', 'reviews.views.students', name='students'),     
     url(r'^students/(?P<student_id>\d+)/$', 'reviews.views.student', name='student'),
+
+    # Login / logout
+    url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^logout/$', 'reviews.views.logout_page'),
     
 
     # Uncomment the admin/doc line below to enable admin documentation:
