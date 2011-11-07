@@ -27,7 +27,11 @@
                 <span id="subtitle">You're at UC Berkeley. Time to take advantage of it!</span>
                 </div>
                 <div id="account-links">
-                <a href="#">Log in</a>
+		  {% if user.is_authenticated %}
+		  <a href="#">{{ user.username }}</a>
+		  {% else %}
+		  <a href="#">Log in</a>
+		  {% endif %}
                 </div>
             </div>
             <div id="content">

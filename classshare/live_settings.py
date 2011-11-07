@@ -1,3 +1,6 @@
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+
 # Django settings for classshare project.
 
 # Tell the app that it's running in a subdirectory so that URLs are correct
@@ -114,6 +117,29 @@ TEMPLATE_DIRS = (
     # TODO: Replace this with an absolute path, but for now leave relative so it works on all our systems.
     '/groups/classshare/classshare/templates',
 )
+
+# LDAP INTEGRATION
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_LDAP_SERVER_URI = 'ldap://malaprop.ischool.berkeley.edu'
+
+AUTH_LDAP_USER_DN_TEMPLATE = 'uid=%(user)s,ou=People,dc=ischool,dc=berkeley,dc=edu'
+
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=Group,dc=ischool,dc=berkeley,dc=edu",
+                                    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)")
+
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr='cn')
+
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = {
+    "first_name": "givenName",
+    "last_name": "sn",
+    "email": "mail"
+}
 
 INSTALLED_APPS = (
     'django.contrib.auth',

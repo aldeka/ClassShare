@@ -114,4 +114,4 @@ class Review(models.Model):
         ordering = ['-timestamp']
     
     def __unicode__(self):
-        return author.name + "'s review of " + self.reviewed_class
+        return self.author.username + "'s review of " + str(self.reviewed_class)
