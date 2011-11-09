@@ -3,23 +3,23 @@ from django.contrib import admin
 
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    url(r'^$', 'reviews.views.home', name='home'),
+urlpatterns = patterns('reviews.views',
+    url(r'^$', 'home', name='home'),
     url(r'^courses/$', 'reviews.views.courses', name='courses'),
-    url(r'^courses/(?P<course_id>\d+)/$', 'reviews.views.course', name="course"),
-    url(r'^depts/$', 'reviews.views.departments', name='departments'),  
-    url(r'^depts/(?P<dept_abb>[\w,\s]+)/$', 'reviews.views.department', name='department'),
-    url(r'^instructors/$', 'reviews.views.instructors', name='instructors'),     
-    url(r'^instructors/(?P<instructor_id>\d+)/$', 'reviews.views.instructor', name='instructor'),
-    url(r'^tags/$', 'reviews.views.tags', name='tags'),
-    url(r'^tags/(?P<tag_id>\d+)/$', 'reviews.views.tag', name='tag'),
-    url(r'^allreviews/$', 'reviews.views.reviews', name='reviews'),
-	url(r'^students/$', 'reviews.views.students', name='students'),     
-    url(r'^students/(?P<student_id>\d+)/$', 'reviews.views.student', name='student'),
+    url(r'^courses/(?P<course_id>\d+)/$', 'course', name="course"),
+    url(r'^depts/$', 'departments', name='departments'),  
+    url(r'^depts/(?P<dept_abb>[\w,\s]+)/$', 'department', name='department'),
+    url(r'^instructors/$', 'instructors', name='instructors'),     
+    url(r'^instructors/(?P<instructor_id>\d+)/$', 'instructor', name='instructor'),
+    url(r'^tags/$', 'tags', name='tags'),
+    url(r'^tags/(?P<tag_id>\d+)/$', 'tag', name='tag'),
+    url(r'^allreviews/$', 'reviews', name='reviews'),
+    url(r'^students/$', 'students', name='students'),     
+    url(r'^students/(?P<student_id>\d+)/$', 'student', name='student'),
 
     # Login / logout
     url(r'^login/$', 'django.contrib.auth.views.login'),
-    url(r'^logout/$', 'reviews.views.logout_page'),
+    url(r'^logout/$', 'logout_page'),
     
 
     # Uncomment the admin/doc line below to enable admin documentation:
