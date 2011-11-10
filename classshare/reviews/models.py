@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 import datetime
 
@@ -47,7 +48,6 @@ class Course(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
     department = models.ForeignKey(Department, blank=False)
-    ccn = models.IntegerField(blank=True,null=True)
     number = models.CharField(max_length=12)
     tags = models.ManyToManyField(Tag, blank=True, null=True)
     
@@ -65,6 +65,11 @@ class Course(models.Model):
             pos_reviews = the_class.review_set.filter
             thumbs = thumbs + len(pos_reviews)
         return thumbs
+        
+class CourseForm(ModelForm):
+    class Meta:
+        model = Course
+        fields = ('department','number','name','description','tags')
 
 
 class Class(models.Model):
