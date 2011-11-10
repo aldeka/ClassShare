@@ -58,6 +58,7 @@ def tag(request, tag_id):
     return render_to_response('reviews/single_tag.html', {'tag': tag},
                               context_instance=RequestContext(request))
 
+# TODO: Do we need this view?
 def reviews(request):
     reviews = Review.objects.all()
     return render_to_response('reviews/review_list.html', {'reviews': reviews},

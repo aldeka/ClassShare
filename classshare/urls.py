@@ -5,7 +5,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('reviews.views',
     url(r'^$', 'home', name='home'),
-    url(r'^courses/$', 'reviews.views.courses', name='courses'),
+    url(r'^courses/$', 'courses', name='courses'),
     url(r'^courses/(?P<course_id>\d+)/$', 'course', name="course"),
     url(r'^depts/$', 'departments', name='departments'),  
     url(r'^depts/(?P<dept_abb>[\w,\s]+)/$', 'department', name='department'),
@@ -17,14 +17,10 @@ urlpatterns = patterns('reviews.views',
     url(r'^students/$', 'students', name='students'),     
     url(r'^students/(?P<student_id>\d+)/$', 'student', name='student'),
 
-    # Login / logout
-    url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', 'logout_page'),
-    
+)
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
+urlpatterns += patterns('',
+    url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^admin/', include(admin.site.urls)),
 )

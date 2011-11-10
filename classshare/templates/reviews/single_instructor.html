@@ -6,7 +6,7 @@
 <h3>Courses Taught</h3>
 <ul>
 {% for course in instructor.courses %}
-  <li><a href="/courses/{{course.pk}}/">{{ course.department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
+  <li><a href="{% url reviews.views.course course.pk %}">{{ course.department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
 {% endfor %}
 
 {% endblock content %}
