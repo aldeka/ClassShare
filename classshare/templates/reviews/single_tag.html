@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Instructor: {{ instructor.name }}</h2>
+<h2>Tag: {{ tag.name }}</h2>
 
-<h3>Courses Taught</h3>
+<h3>Courses Tagged</h3>
 <ul>
-{% for course in instructor.courses %}
+{% for course in tag.course_set.all %}
   <li><a href="{% url reviews.views.course course.pk %}">{{ course.department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
 {% endfor %}
 

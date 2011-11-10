@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Tags:<h2>
+<ul>
+    {% for tag in tags %}
+        <li><a href="{% url reviews.views.tag tag.pk %}">{{ tag.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}

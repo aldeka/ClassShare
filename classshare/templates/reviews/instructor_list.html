@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Instructors:<h2>
+<ul>
+    {% for instructor in instructors %}
+        <li><a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}

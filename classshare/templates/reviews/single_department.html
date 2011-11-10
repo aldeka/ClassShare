@@ -9,7 +9,7 @@
 <h3>Courses</h3>
 <ul>
 {% for course in department.course_set.all %}
-  <li><a href="/courses/{{course.pk}}/">{{ department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
+  <li><a href="{% url reviews.views.course course.pk %}">{{ department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
 {% endfor %}
 
 {% endblock content %}
