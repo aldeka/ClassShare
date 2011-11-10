@@ -5,12 +5,12 @@ import re
 
 def home(request):
     courses = Course.objects.all()
-    return render_to_response('index.html', {'courses' : courses })
+    return render_to_response('index.html', {'courses' : courses }, context_instance=RequestContext(request))
     
 def add_or_review_course(request):
     '''handles the front-page form to add a new course or review an existing (autocompleted) course'''
     if request.POST:
-        course_stub = request.POST('course-stub')
+        course_stub = request.POST.__getitem__('course-stub')
         # TODO: we should probably do an initial match to make sure that the input is parseable
         stub_dept = re.search('^([a-zA-Z]+)', course_stub)(0)
         stub_classnum = re.search('^[a-zA-Z]+[\ ]?([0-9]+[0-9a-zA-Z.\-]*)',course_stub)(0)

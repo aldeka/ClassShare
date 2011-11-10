@@ -21,7 +21,7 @@ Or just <a href="/courses/">look through all of them</a>!
 
 <div id="review-course">
 <h3>Review a course you've taken:</h3>
-<form id="add-or-review-course" action="/courses/add/" method="post">
+<form id="add-or-review-course" action="/courses/add_or_review/" method="post">{% csrf_token %}
 <input name="course-stub" placeholder="Start typing the course's department code and number"></input>
 <input type='submit' value="Enter"></input>
 </form>
