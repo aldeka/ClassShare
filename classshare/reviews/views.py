@@ -32,13 +32,13 @@ def add_or_review_course(request):
         
 def add_course(request):
     form = CourseForm()
-    return render_to_response('reviews/add_course_form.html', {'form': form })
+    return render_to_response('reviews/add_course_form.html', {'form': form }, context_instance=RequestContext(request))
     
 def edit_course(request, course_id):
     #TODO: This method's template doesn't exist yet, but should inherit the add_course_form.
     course = Course.objects.get(pk=course_id)
     form = CourseForm(instance=course)
-    return render_to_response('reviews/edit_course_form.html', {'form': form })
+    return render_to_response('reviews/edit_course_form.html', {'form': form }, context_instance=RequestContext(request))
     
 def choose_course_to_review(request, course_set):
     data = []
@@ -53,11 +53,17 @@ def review_course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     # the line below is redundant, but whatever
     course_id = course.pk
-    return render_to_response('reviews/review_form.html', {'course_id' : course_id })
+    return render_to_response('reviews/review_form.html', {'course_id' : course_id }, context_instance=RequestContext(request))
     
 def courses(request):
+    message = ''
+    if request.POST:
+    # if we just created a new course
+        f = CourseForm(request.POST)
+        new_course = f.save()
+        message = 'New course saved'
     courses = Course.objects.all()
-    return render_to_response('reviews/course_list.html', {'courses' : courses },
+    return render_to_response('reviews/course_list.html', {'courses' : courses, 'message' : message },
                               context_instance=RequestContext(request))
     
 def course(request, course_id):
