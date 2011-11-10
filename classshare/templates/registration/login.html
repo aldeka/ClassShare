@@ -22,7 +22,7 @@
             {% if next %}
                 <input type="hidden" name="next" value="{{ next }}" />
             {% else %}
-                <input type="hidden" name="next" value="/" />
+                <input type="hidden" name="next" value="{% url reviews.views.home %}" />
             {% endif %}
             <input type="submit" value="login" />
         </form>

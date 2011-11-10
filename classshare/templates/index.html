@@ -12,16 +12,16 @@
 <div id="find-course">
 <h3>Look up a course:</h3>
 <ul>
-<li><a href="/depts/">by department</a></li>
-<li><a href="/tags/">by tag</a></li>
-<li><a href="/search/">by keyword</a></li>
+<li><a href="{% url departments %}">by department</a></li>
+<li><a href="{% url tags %}">by tag</a></li>
+<li><a href="#">by keyword</a></li>
 </ul>
-Or just <a href="/courses/">look through all of them</a>!
+Or just <a href="{% url courses %}">look through all of them</a>!
 </div>
 
 <div id="review-course">
 <h3>Review a course you've taken:</h3>
-<form id="add-or-review-course" action="/courses/add_or_review/" method="post">{% csrf_token %}
+<form id="add-or-review-course" action="{% url add_or_review_course %}" method="post">{% csrf_token %}
 <input name="course-stub" placeholder="Start typing the course's department code and number"></input>
 <input type='submit' value="Enter"></input>
 </form>

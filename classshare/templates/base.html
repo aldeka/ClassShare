@@ -28,9 +28,9 @@
                 </div>
                 <div id="account-links">
 		  {% if user.is_authenticated %}
-		  <a href="#">{{ user.username }}</a>
+		  <a href="{% url student user.pk %}">{{ user.username }}</a>
 		  {% else %}
-		  <a href="#">Log in</a>
+		  <a href="{% url login %}">Log in</a>
 		  {% endif %}
                 </div>
             </div>

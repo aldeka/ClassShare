@@ -19,8 +19,8 @@ Thumbs-up: {{ course.thumb_count }}
     {% for review in class.review_set.all %}
         <div id="review-{{ review.pk }}" class="review">
             <div class="review-head">
-            {% if review.thumbs_up %}Thumbs up icon goes here{% endif %} 
-            {% if review.is_anonymous %}Anonymous{% else %}{{ review.author.name }}{% endif %} reviewed the {{ review.class.semester_formatted }} offering of {{ course.course_code }}:
+            {% if review.thumbs_up %}Thumbs up icon goes here{% endif %}<br/>
+            {% if review.is_anonymous %}Anonymous{% else %}{{ review.author.username }}{% endif %} reviewed the {{ review.reviewed_class.semester_formatted }} offering of {{ course.course_code }}:
             </div>
             <div class="review-content">
             {{ review.content }}
