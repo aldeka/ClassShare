@@ -3,14 +3,14 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 import datetime
 
-class Student(User):
-    '''Model for all of our users, inheriting Django's built-in User model'''
-    # TODO: Make LDAP connect to this thing
-    
+class UserProfile(models.Model):
+    '''Model for all of our users.'''
+    user = models.OneToOneField(User)
+    is_student = models.BooleanField(default=True)
     is_alumnus = models.BooleanField(default=False)
     
     def __unicode__(self):
-        return self.username
+        return self.user.username
 
 class Instructor(models.Model):
     '''Model for a course instructor.'''
@@ -108,7 +108,7 @@ class Class(models.Model):
 
 class Review(models.Model):
     '''Model for a single person's review of a course'''
-    author = models.ForeignKey(Student, blank=True, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
     reviewed_class = models.ForeignKey(Class)
     content = models.TextField(blank=True,null=True)
     is_anonymous = models.BooleanField(default=False)

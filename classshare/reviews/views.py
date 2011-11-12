@@ -2,6 +2,7 @@ from django.contrib.auth import logout
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
+from django.contrib.auth.models import User
 from reviews.models import *
 import re
 
@@ -117,14 +118,14 @@ def reviews(request):
                               context_instance=RequestContext(request))
 
 def students(request):
-    students = Student.objects.all()
+    students = UserProfile.objects.filter(is_student=True)
     return render_to_response("reviews/student_list.html",{'students': students},
                               context_instance=RequestContext(request))
 
 def student(request, student_id):
-    student = get_object_or_404(Student, pk=student_id)
+    student = get_object_or_404(UserProfile, pk=student_id)
     courses = set()
-    for review in student.review_set.all():
+    for review in student.user.review_set.all():
         courses.add(review.reviewed_class.course)
     student.courses = list(courses)
     return render_to_response('reviews/single_student.html', {'student': student},

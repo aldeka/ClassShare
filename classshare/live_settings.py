@@ -118,6 +118,9 @@ TEMPLATE_DIRS = (
     '/groups/classshare/classshare/templates',
 )
 
+# Set UserProfile model as user profile, which can be accessed via user.get_profile()
+AUTH_PROFILE_MODULE = "reviews.userprofile
+
 # LDAP INTEGRATION
 
 AUTHENTICATION_BACKENDS = (
