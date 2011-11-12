@@ -4,7 +4,7 @@
 <h2>Departments:<h2>
 <ul>
     {% for department in departments %}
-        <li><a href="{% reviews.views.department department.abb %}">{{ department.name }}</a></li>
+        <li><a href="{% url department department.abb %}">{{ department.name }}</a></li>
     {% endfor %}
 </ul>
 {% endblock content %}

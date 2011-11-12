@@ -114,7 +114,9 @@ TEMPLATE_DIRS = (
 )
 
 # Set UserProfile model as user profile, which can be accessed via user.get_profile()
-AUTH_PROFILE_MODULE = "reviews.userprofile"
+AUTH_PROFILE_MODULE = 'reviews.userprofile'
+
+LOGIN_URL = '/login/'
 
 INSTALLED_APPS = (
     'django.contrib.auth',
