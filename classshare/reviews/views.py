@@ -17,21 +17,21 @@ def add_or_review_course(request):
     if request.POST:
         course_stub = request.POST.__getitem__('course-stub')
         # TODO: we should probably do an initial match to make sure that the input is parseable
-        stub_dept = re.search('^([a-zA-Z]+)', course_stub)(0)
-        stub_classnum = re.search('^[a-zA-Z]+[\ ]?([0-9]+[0-9a-zA-Z.\-]*)',course_stub)(0)
+        stub_dept = re.search('^([a-zA-Z]+)', course_stub).group(0)
+        stub_classnum = re.search('^[a-zA-Z]+[\ ]?([0-9]+[0-9a-zA-Z.\-]*)',course_stub).group(0)
         # check if this course already exists in database
         matching_courses = Course.objects.filter(department = stub_dept, number=stub_classnum)
         if matching_courses:
             if len(matching_courses) == 1:
             # if there's a unique match
                 course_id = matching_courses[0].pk
-                review_course(request, course_id)
+                return review_course(request, course_id)
             else:
             # go to intermediate page where you choose which course you mean to edit
-                choose_course_to_review(request, matching_courses)
+                return choose_course_to_review(request, matching_courses)
         # if not, add a new course
         else:
-            add_course(request)
+            return add_course(request)
 
 @login_required
 def add_course(request):
