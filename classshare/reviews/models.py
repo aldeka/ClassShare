@@ -1,5 +1,5 @@
 from django.db import models
-from django.forms import ModelForm
+from django import forms
 from django.contrib.auth.models import User
 import datetime
 
@@ -17,7 +17,7 @@ class Instructor(models.Model):
     name = models.CharField(max_length=200)
     
     def __unicode__(self):
-        return 'Instructor: ' + self.name
+        return self.name
 
 class Department(models.Model):
     '''Model for an academic department.'''
@@ -67,7 +67,7 @@ class Course(models.Model):
             thumbs = thumbs + len(pos_reviews)
         return thumbs
         
-class CourseForm(ModelForm):
+class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = ('department','number','name','description','tags')
@@ -83,7 +83,6 @@ class Class(models.Model):
     course = models.ForeignKey(Course)
     instructor = models.ForeignKey(Instructor, blank=True, null=True)
     year = models.IntegerField()
-    ccn = models.IntegerField(blank=True,null=True)
     semester = models.CharField(max_length=6, choices=SEMESTER_CHOICES)
     
     class Meta:
@@ -105,6 +104,13 @@ class Class(models.Model):
         elif self.semester == 'Summer':
             month = 5
         return datetime.date(self.year, month, 15)
+
+class ClassForm(forms.ModelForm):
+    course = forms.IntegerField(widget=forms.HiddenInput()) 
+
+    class Meta:
+        model = Class
+        fields = ('year', 'semester', 'instructor')
 
 class Review(models.Model):
     '''Model for a single person's review of a course'''

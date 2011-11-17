@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>When did you take {{ course.course_code }}?</h2>
+<form method="post" action="/courses/">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Next"></input>
+</form>
+{% endblock content %}
