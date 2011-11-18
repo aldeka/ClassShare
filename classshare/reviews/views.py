@@ -39,8 +39,12 @@ def add_course(request):
     if request.method == "POST":
         form = CourseForm(request.POST)
         if form.is_valid():
-            new_course = form.save()
-            return redirect("choose_class", new_course.id)
+            course, created = Course.objects.get_or_create(
+                name = form.cleaned_data["name"],
+                description = form.cleaned_data["description"],
+                department = form.cleaned_data["department"],
+                number = form.cleaned_data["number"])
+            return redirect("choose_class", course.id)
     else:
         # TODO: Prepopulate with whatever they input into the search form
         form = CourseForm()
@@ -51,7 +55,7 @@ def edit_course(request, course_id):
     #TODO: This method's template doesn't exist yet, but should inherit the add_course_form.
     course = Course.objects.get(pk=course_id)
     form = CourseForm(instance=course)
-    return render_to_response('reviews/edit_course_form.html', {'form': form }, context_instance=RequestContext(request))
+    return render(request, 'reviews/edit_course_form.html', {'form': form })
 
 @login_required
 def choose_course_to_review(request, course_set):
@@ -62,8 +66,7 @@ def choose_course_to_review(request, course_set):
         course_dico['name'] = course.name
         data.append(course_dico)
     # TODO: Name template something else
-    return render_to_response('reviews/intermediate_step.html', { 'course_data' : data },
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/intermediate_step.html', { 'course_data' : data })
 
 @login_required
 def choose_class_to_review(request, course_id):
@@ -71,9 +74,12 @@ def choose_class_to_review(request, course_id):
     if request.method == "POST":
         form = ClassForm(request.POST)
         if form.is_valid():
-            # TODO: use get or create instead
-            new_class = form.save()
-            return redirect("review_course", new_class.id)
+            cls, created = Class.objects.get_or_create(
+                course = form.cleaned_data["course"],
+                instructor = form.cleaned_data["instructor"],
+                year = form.cleaned_data["year"],
+                semester = form.cleaned_data["semester"])
+            return redirect("review_course", cls.id)
     else:
         # TODO: Restrict instructor options to those who have taught the course.
         # TODO: Allow users to add an instructor from this page
@@ -95,16 +101,8 @@ def review_course(request, class_id):
 
 @login_required
 def courses(request):
-    message = ''
-    if request.POST:
-    # if we just created a new course
-        f = CourseForm(request.POST)
-        new_course = f.save()
-        message = 'New course saved'
     courses = Course.objects.all()
-    # TODO: Take them to the review page instead
-    return render(request, 'reviews/course_list.html', {'courses' : courses, 'message' : message },
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/course_list.html', {'courses' : courses})
 
 @login_required
 def course(request, course_id):
@@ -113,27 +111,23 @@ def course(request, course_id):
     for reviewed_class in course.class_set.all():
         instructors.add(reviewed_class.instructor)
     course.instructors = list(instructors)
-    return render_to_response('reviews/single_course.html', {'course': course},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/single_course.html', {'course': course})
 
 @login_required
 def departments(request):
     departments = Department.objects.all()
-    return render_to_response('reviews/department_list.html', {'departments': departments},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/department_list.html', {'departments': departments})
 
 @login_required
 def department(request, dept_abb):
     dept_abb = dept_abb.upper()
     dept = get_object_or_404(Department, pk=dept_abb)
-    return render_to_response('reviews/single_department.html', {'department': dept},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/single_department.html', {'department': dept})
 
 @login_required
 def instructors(request):
     instructors = Instructor.objects.all()
-    return render_to_response('reviews/instructor_list.html', {'instructors': instructors},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/instructor_list.html', {'instructors': instructors})
 
 @login_required
 def instructor(request, instructor_id):
@@ -142,32 +136,27 @@ def instructor(request, instructor_id):
     for reviewed_class in instructor.class_set.all():
         courses.add(reviewed_class.course)
     instructor.courses = list(courses)
-    return render_to_response('reviews/single_instructor.html', {'instructor': instructor},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/single_instructor.html', {'instructor': instructor})
 
 @login_required
 def tags(request):
     tags = Tag.objects.all()
-    return render_to_response('reviews/tag_list.html', {'tags': tags},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/tag_list.html', {'tags': tags})
 
 @login_required
 def tag(request, tag_id):
     tag = get_object_or_404(Tag, pk=tag_id)
-    return render_to_response('reviews/single_tag.html', {'tag': tag},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/single_tag.html', {'tag': tag})
 
 # TODO: Do we need this view?
 def reviews(request):
     reviews = Review.objects.all()
-    return render_to_response('reviews/review_list.html', {'reviews': reviews},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/review_list.html', {'reviews': reviews})
 
 @login_required
 def students(request):
     students = UserProfile.objects.filter(is_student=True)
-    return render_to_response("reviews/student_list.html",{'students': students},
-                              context_instance=RequestContext(request))
+    return render(request, "reviews/student_list.html", {'students': students})
 
 @login_required
 def student(request, student_id):
@@ -176,10 +165,9 @@ def student(request, student_id):
     for review in student.user.review_set.all():
         courses.add(review.reviewed_class.course)
     student.courses = list(courses)
-    return render_to_response('reviews/single_student.html', {'student': student},
-                              context_instance=RequestContext(request))
+    return render(request, 'reviews/single_student.html', {'student': student})
 
 def logout_page(request):
     """Log users out and re-direct them to the login page."""
     logout(request)
-    return HttpResponseRedirect('/login')
+    return redirect('login')

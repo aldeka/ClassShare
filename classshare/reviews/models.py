@@ -31,7 +31,7 @@ class Department(models.Model):
         ordering = ['abb']
     
     def __unicode__(self):
-        return self.abb + ' department'
+        return self.abb
 
 
 class Tag(models.Model):
