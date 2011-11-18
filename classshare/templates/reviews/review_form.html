@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Review {{ class.course.course_code }}?</h2>
+<form method="post" action="{% url review_course class.id %}">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Save"></input>
+</form>
+{% endblock content %}

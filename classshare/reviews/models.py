@@ -48,7 +48,7 @@ class Course(models.Model):
     '''Model for a given course'''
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
-    department = models.ForeignKey(Department, blank=False)
+    department = models.ForeignKey(Department)
     number = models.CharField(max_length=12)
     tags = models.ManyToManyField(Tag, blank=True, null=True)
     
@@ -80,7 +80,7 @@ class Class(models.Model):
         ('Spring', 'Spring'),
         ('Summer', 'Summer'),
     )
-    course = models.ForeignKey(Course)
+    course = models.ForeignKey(Course, null=True)
     instructor = models.ForeignKey(Instructor, blank=True, null=True)
     year = models.IntegerField()
     semester = models.CharField(max_length=6, choices=SEMESTER_CHOICES)
@@ -106,15 +106,15 @@ class Class(models.Model):
         return datetime.date(self.year, month, 15)
 
 class ClassForm(forms.ModelForm):
-    course = forms.IntegerField(widget=forms.HiddenInput()) 
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.HiddenInput()) 
 
     class Meta:
         model = Class
-        fields = ('year', 'semester', 'instructor')
+        fields = ('course', 'year', 'semester', 'instructor')
 
 class Review(models.Model):
     '''Model for a single person's review of a course'''
-    author = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     reviewed_class = models.ForeignKey(Class)
     content = models.TextField(blank=True,null=True)
     is_anonymous = models.BooleanField(default=False)
@@ -126,3 +126,9 @@ class Review(models.Model):
     
     def __unicode__(self):
         return self.author.username + "'s review of " + str(self.reviewed_class)
+
+class ReviewForm(forms.ModelForm):
+    # TODO: Look up how to set user for form to current user
+    author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
+    class Meta:
+        model = Review
