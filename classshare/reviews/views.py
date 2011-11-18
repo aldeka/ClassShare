@@ -1,9 +1,8 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
-from django.template import RequestContext
 from reviews.models import *
 import re
 
@@ -44,6 +43,8 @@ def add_course(request):
                 description = form.cleaned_data["description"],
                 department = form.cleaned_data["department"],
                 number = form.cleaned_data["number"])
+            if created:
+                messages.success(request, "Added new course: %s", course.course_code())
             return redirect("choose_class", course.id)
     else:
         # TODO: Prepopulate with whatever they input into the search form
@@ -93,8 +94,9 @@ def review_course(request, class_id):
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            form.save()
-            # Do something. Redirect?
+            new_review = form.save()
+            course_id = new_review.reviewed_class.course.id
+            return redirect("course", course_id)
     else:
         form = ReviewForm(initial={'author': request.user, 'reviewed_class': class_id})
     return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class })
@@ -137,6 +139,16 @@ def instructor(request, instructor_id):
         courses.add(reviewed_class.course)
     instructor.courses = list(courses)
     return render(request, 'reviews/single_instructor.html', {'instructor': instructor})
+
+@login_required
+def add_instructor(request):
+    if request.method == "POST":
+        form = InstructorForm(request.POST)
+        if form.valid():
+            instructor, created = Instructor.objects.get_or_create(name = form.cleaned_data["name"])
+    else:
+        form = InstructorForm()
+    return render(request, 'reviews/instructor_form.html', {'form': form})
 
 @login_required
 def tags(request):
