@@ -25,6 +25,11 @@ Thumbs-up: {{ course.thumb_count }}
             <div class="review-content">
             {{ review.content }}
             </div>
+            {% if review.author == logged_in_user %}
+            <div class="review-foot">
+            <a href="#">Edit</a> <a href="#">Delete</a>
+            </div>
+            {% endif %}
         </div>
     {% endfor %}
 {% endfor %}

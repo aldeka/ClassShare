@@ -1,7 +1,7 @@
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template import RequestContext
 from reviews.models import *
@@ -90,14 +90,32 @@ def choose_class_to_review(request, course_id):
 @login_required
 def review_course(request, class_id):
     reviewed_class = get_object_or_404(Class, pk=class_id)
+    course = reviewed_class.course
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
             form.save()
-            # Do something. Redirect?
+            return redirect("course", course.id)
     else:
         form = ReviewForm(initial={'author': request.user, 'reviewed_class': class_id})
-    return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class })
+    return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class, 'is_new_review' : True })
+    
+@login_required
+def edit_review(request, class_id, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    reviewed_class = review.reviewed_class
+    course = reviewed_class.course
+    if request.method =="POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("course", course.id)
+    elif request.user == review.author:
+        # take them to the edit form
+        form = ReviewForm(instance=review)
+        return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class, 'is_new_review' : False })
+    else:
+        return HttpResponseForbidden()
 
 @login_required
 def courses(request):
@@ -106,12 +124,13 @@ def courses(request):
 
 @login_required
 def course(request, course_id):
+    user = request.user
     course = get_object_or_404(Course, pk=course_id)
     instructors = set()
     for reviewed_class in course.class_set.all():
         instructors.add(reviewed_class.instructor)
     course.instructors = list(instructors)
-    return render(request, 'reviews/single_course.html', {'course': course})
+    return render(request, 'reviews/single_course.html', {'course': course, 'logged_in_user': user})
 
 @login_required
 def departments(request):
