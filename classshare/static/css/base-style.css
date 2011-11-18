@@ -47,6 +47,18 @@ h1, h2, h3 {
     float: right;
 }
 
+#nav {
+    padding: 0;
+}
+
+#nav li {
+    display: inline;
+    list-style-type: none;
+    padding: 5px 10px;
+    margin-right: 5px;
+    background: white;
+}
+
 #content {
     clear: both;
     padding-top: 10px;
