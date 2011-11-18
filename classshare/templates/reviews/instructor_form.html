@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Add instructor:</h2>
+<form method="post" action="{% url add_instructor %}">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Save"></input>
+</form>
+{% endblock content %}

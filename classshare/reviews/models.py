@@ -19,6 +19,11 @@ class Instructor(models.Model):
     def __unicode__(self):
         return self.name
 
+class InstructorForm(forms.ModelForm):
+
+    class Meta:
+        model = Instructor
+
 class Department(models.Model):
     '''Model for an academic department.'''
     name = models.CharField(max_length=200, blank=True,null=True)

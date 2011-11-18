@@ -2,6 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, get_object_or_404
 from reviews.models import *
 import re
@@ -44,7 +45,7 @@ def add_course(request):
                 department = form.cleaned_data["department"],
                 number = form.cleaned_data["number"])
             if created:
-                messages.success(request, "Added new course: %s", course.course_code())
+                messages.success(request, "Added new course: %s" % course)
             return redirect("choose_class", course.id)
     else:
         # TODO: Prepopulate with whatever they input into the search form
@@ -80,6 +81,8 @@ def choose_class_to_review(request, course_id):
                 instructor = form.cleaned_data["instructor"],
                 year = form.cleaned_data["year"],
                 semester = form.cleaned_data["semester"])
+            if created:
+                messages.success(request, "Added new class: %s" % cls)
             return redirect("review_course", cls.id)
     else:
         # TODO: Restrict instructor options to those who have taught the course.
@@ -91,15 +94,34 @@ def choose_class_to_review(request, course_id):
 @login_required
 def review_course(request, class_id):
     reviewed_class = get_object_or_404(Class, pk=class_id)
+    course = reviewed_class.course
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
             new_review = form.save()
             course_id = new_review.reviewed_class.course.id
+            messages.success("Added new review for %s" % course)
             return redirect("course", course_id)
     else:
         form = ReviewForm(initial={'author': request.user, 'reviewed_class': class_id})
-    return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class })
+    return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class, 'is_new_review' : True })
+    
+@login_required
+def edit_review(request, class_id, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    reviewed_class = review.reviewed_class
+    course = reviewed_class.course
+    if request.method =="POST":
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("course", course.id)
+    elif request.user == review.author:
+        # take them to the edit form
+        form = ReviewForm(instance=review)
+        return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class, 'is_new_review' : False })
+    else:
+        return HttpResponseForbidden()
 
 @login_required
 def courses(request):
@@ -108,12 +130,13 @@ def courses(request):
 
 @login_required
 def course(request, course_id):
+    user = request.user
     course = get_object_or_404(Course, pk=course_id)
     instructors = set()
     for reviewed_class in course.class_set.all():
         instructors.add(reviewed_class.instructor)
     course.instructors = list(instructors)
-    return render(request, 'reviews/single_course.html', {'course': course})
+    return render(request, 'reviews/single_course.html', {'course': course, 'logged_in_user': user})
 
 @login_required
 def departments(request):
@@ -144,8 +167,11 @@ def instructor(request, instructor_id):
 def add_instructor(request):
     if request.method == "POST":
         form = InstructorForm(request.POST)
-        if form.valid():
+        if form.is_valid():
             instructor, created = Instructor.objects.get_or_create(name = form.cleaned_data["name"])
+            if created:
+                messages.success(request, 'The instructor "%s" was added successfully.' % instructor.name)
+            return redirect('instructor', instructor.id)
     else:
         form = InstructorForm()
     return render(request, 'reviews/instructor_form.html', {'form': form})
