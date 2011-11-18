@@ -80,7 +80,7 @@ class Class(models.Model):
         ('Spring', 'Spring'),
         ('Summer', 'Summer'),
     )
-    course = models.ForeignKey(Course, null=True)
+    course = models.ForeignKey(Course)
     instructor = models.ForeignKey(Instructor, blank=True, null=True)
     year = models.IntegerField()
     semester = models.CharField(max_length=6, choices=SEMESTER_CHOICES)
