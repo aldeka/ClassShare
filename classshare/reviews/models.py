@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django import forms
 from django.contrib.auth.models import User
 import datetime
@@ -11,6 +13,12 @@ class UserProfile(models.Model):
     
     def __unicode__(self):
         return self.user.username
+
+@receiver(models.signals.post_save, sender=User)        
+def create_profile(sender, instance, created, **kwargs):
+    """Create a UserProfile object each time a User is created."""
+    if created or not instance.get_profile():
+        UserProfile.objects.get_or_create(user=instance)
 
 class Instructor(models.Model):
     '''Model for a course instructor.'''
@@ -133,7 +141,8 @@ class Review(models.Model):
         return self.author.username + "'s review of " + str(self.reviewed_class)
 
 class ReviewForm(forms.ModelForm):
-    # TODO: Look up how to set user for form to current user
+    # TODO: Look up how to set user for form to current user.
+    # http://stackoverflow.com/questions/291945/how-do-i-filter-foreignkey-choices-in-a-django-modelform
     author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
     class Meta:
         model = Review

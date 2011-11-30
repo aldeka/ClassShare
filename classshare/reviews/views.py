@@ -1,11 +1,25 @@
+from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth.views import login as auth_login
 from django.contrib import messages
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from reviews.models import *
 import re
+
+def secure_required(view_func):
+    """Decorator makes sure URL is accessed over https."""
+    def _wrapped_view_func(request, *args, **kwargs):
+        if not request.is_secure():
+            if getattr(settings, 'HTTPS_SUPPORT', True):
+                request_url = request.build_absolute_uri(request.get_full_path())
+                secure_url = request_url.replace('http://', 'https://')
+                return HttpResponseRedirect(secure_url)
+        return view_func(request, *args, **kwargs)
+    return _wrapped_view_func
+
 
 def home(request):
     courses = Course.objects.all()
@@ -209,3 +223,8 @@ def logout_page(request):
     """Log users out and re-direct them to the login page."""
     logout(request)
     return redirect('login')
+
+# Uncomment decorator for live version to enable secure login
+#@secure_required
+def login(request):
+    return auth_login(request)

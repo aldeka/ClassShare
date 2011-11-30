@@ -1,5 +1,5 @@
 import ldap
-from django_auth_ldap.config import LDAPSearch, GroupOfNamesType
+from django_auth_ldap.config import LDAPSearch, PosixGroupType
 
 # Django settings for classshare project.
 
@@ -119,7 +119,7 @@ TEMPLATE_DIRS = (
 )
 
 # Set UserProfile model as user profile, which can be accessed via user.get_profile()
-AUTH_PROFILE_MODULE = "reviews.userprofile
+AUTH_PROFILE_MODULE = "reviews.userprofile"
 
 # LDAP INTEGRATION
 
@@ -133,9 +133,9 @@ AUTH_LDAP_SERVER_URI = 'ldap://malaprop.ischool.berkeley.edu'
 AUTH_LDAP_USER_DN_TEMPLATE = 'uid=%(user)s,ou=People,dc=ischool,dc=berkeley,dc=edu'
 
 AUTH_LDAP_GROUP_SEARCH = LDAPSearch("ou=Group,dc=ischool,dc=berkeley,dc=edu",
-                                    ldap.SCOPE_SUBTREE, "(objectClass=groupOfNames)")
+                                    ldap.SCOPE_SUBTREE)
 
-AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr='cn')
+AUTH_LDAP_GROUP_TYPE = PosixGroupType(name_attr='cn')
 
 # Populate the Django user from the LDAP directory.
 AUTH_LDAP_USER_ATTR_MAP = {
@@ -143,6 +143,22 @@ AUTH_LDAP_USER_ATTR_MAP = {
     "last_name": "sn",
     "email": "mail"
 }
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_staff": "cn=staff,ou=Group,dc=ischool,dc=berkeley,dc=edu",
+}
+
+AUTH_LDAP_PROFILE_FLAGS_BY_GROUP = {
+    "is_student": "cn=masters,ou=Group,dc=ischool,dc=berkeley,dc=edu",
+    "is_alumnus": "cn=alumni,ou=Group,dc=ischool,dc=berkeley,dc=edu",
+}
+
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+# Cache group memberships for an hour to minimize LDAP traffic
+AUTH_LDAP_CACHE_GROUPS = True
+AUTH_LDAP_GROUP_CACHE_TIMEOUT = 3600
 
 INSTALLED_APPS = (
     'django.contrib.auth',
