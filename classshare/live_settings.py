@@ -118,9 +118,6 @@ TEMPLATE_DIRS = (
     '/groups/classshare/classshare/templates',
 )
 
-# Set UserProfile model as user profile, which can be accessed via user.get_profile()
-AUTH_PROFILE_MODULE = "reviews.userprofile"
-
 # LDAP INTEGRATION
 
 AUTHENTICATION_BACKENDS = (
@@ -146,11 +143,6 @@ AUTH_LDAP_USER_ATTR_MAP = {
 
 AUTH_LDAP_USER_FLAGS_BY_GROUP = {
     "is_staff": "cn=staff,ou=Group,dc=ischool,dc=berkeley,dc=edu",
-}
-
-AUTH_LDAP_PROFILE_FLAGS_BY_GROUP = {
-    "is_student": "cn=masters,ou=Group,dc=ischool,dc=berkeley,dc=edu",
-    "is_alumnus": "cn=alumni,ou=Group,dc=ischool,dc=berkeley,dc=edu",
 }
 
 # Use LDAP group membership to calculate group permissions.

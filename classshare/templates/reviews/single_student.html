@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Student: {{ student.user.username }}</h2>
+<h2>Student: {{ student.username }}</h2>
 
 <h3>Courses Taken</h3>
 <ul>
 {% for course in student.courses %}
-  <li><a href="{% url reviews.views.course course.pk %}">{{ course.department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
+  <li><a href="{% url course course.pk %}">{{ course.department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
 {% endfor %}
 
 {% endblock content %}

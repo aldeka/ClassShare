@@ -5,20 +5,6 @@ from django import forms
 from django.contrib.auth.models import User
 import datetime
 
-class UserProfile(models.Model):
-    '''Model for all of our users.'''
-    user = models.OneToOneField(User)
-    is_student = models.BooleanField(default=True)
-    is_alumnus = models.BooleanField(default=False)
-    
-    def __unicode__(self):
-        return self.user.username
-
-@receiver(models.signals.post_save, sender=User)        
-def create_profile(sender, instance, created, **kwargs):
-    """Create a UserProfile object each time a User is created."""
-    if created or not instance.get_profile():
-        UserProfile.objects.get_or_create(user=instance)
 
 class Instructor(models.Model):
     '''Model for a course instructor.'''
@@ -46,24 +32,12 @@ class Department(models.Model):
     def __unicode__(self):
         return self.abb
 
-
-class Tag(models.Model):
-    '''Model for a user's tag for a course.'''
-    name = models.CharField(max_length=200)
-    
-    class Meta:
-        ordering = ['name']
-    
-    def __unicode__(self):
-        return 'Tag: ' + self.name
-
 class Course(models.Model):
     '''Model for a given course'''
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True,null=True)
     department = models.ForeignKey(Department)
     number = models.CharField(max_length=12)
-    tags = models.ManyToManyField(Tag, blank=True, null=True)
     
     def course_code(self):
         return self.department.abb + ' ' + self.number
@@ -83,7 +57,7 @@ class Course(models.Model):
 class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
-        fields = ('department','number','name','description','tags')
+        fields = ('department','number','name','description')
 
 
 class Class(models.Model):
@@ -146,3 +120,14 @@ class ReviewForm(forms.ModelForm):
     author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
     class Meta:
         model = Review
+
+class Tag(models.Model):
+    '''Model for a user's tag for a course.'''
+    name = models.CharField(max_length=200)
+    review = models.ForeignKey(Review, null=True)
+    
+    class Meta:
+        ordering = ['name']
+    
+    def __unicode__(self):
+        return 'Tag: ' + self.name

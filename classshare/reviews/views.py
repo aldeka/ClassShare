@@ -207,14 +207,14 @@ def reviews(request):
 
 @login_required
 def students(request):
-    students = UserProfile.objects.filter(is_student=True)
+    students = User.objects.filter(groups__name__in = ['masters','phd','alumni', 'test'])
     return render(request, "reviews/student_list.html", {'students': students})
 
 @login_required
 def student(request, student_id):
-    student = get_object_or_404(UserProfile, pk=student_id)
+    student = get_object_or_404(User, pk=student_id)
     courses = set()
-    for review in student.user.review_set.all():
+    for review in student.review_set.all():
         courses.add(review.reviewed_class.course)
     student.courses = list(courses)
     return render(request, 'reviews/single_student.html', {'student': student})

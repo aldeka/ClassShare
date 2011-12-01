@@ -1,7 +1,6 @@
 from reviews.models import *
 from django.contrib import admin
 
-admin.site.register(UserProfile)
 admin.site.register(Instructor)
 admin.site.register(Tag)
 admin.site.register(Review)
