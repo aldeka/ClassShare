@@ -127,7 +127,7 @@ def review_course(request, class_id):
                 content = form.cleaned_data["content"],
                 is_anonymous = form.cleaned_data["is_anonymous"],
                 thumbs_up = form.cleaned_data["thumbs_up"])
-            course_id = new_review.reviewed_class.course.id
+            course_id = review.reviewed_class.course.id
             messages.success(request, "Added new review for %s" % course)
             return redirect("course", course_id)
     else:
