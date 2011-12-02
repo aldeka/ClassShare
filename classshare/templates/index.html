@@ -1,6 +1,53 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="three-column">
+
+<div class="col col1">
+    <h3>I Schoolers are everywhere...</h3>
+    (tag cloud goes here)
+</div>
+
+<div class="col col2">
+    <h3>Top reviewed classes:</h3>
+    <ol>
+        <li>MBA 270 - Underwater Businessweaving</li>
+        <li>CS 160 - UI Stuff</li>
+        <li>ENV 223 - Design Concepts </li>
+    </ol>
+</div>
+
+<div class="col col3">
+    <h3>Log in</h3>
+        {% if form.errors %}
+            <p>Your username and password didn't match, please try again.</p>
+        {% endif %}
+
+        <form method="post" action=".">{% csrf_token %}
+            <p>
+                <label for="id_username">Username:</label>
+                {{ form.username }}
+            </p>
+            <p>
+                <label for="id_password">Password:</label>
+                {{ form.password }}
+            </p>
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}" />
+            {% else %}
+                <input type="hidden" name="next" value="{% url reviews.views.home %}" />
+            {% endif %}
+            <input type="submit" value="login" />
+        </form>
+</div>
+&nbsp;
+</div>
+
+<h2>What is ClassShare?</h2>
+<p>ClassShare is a website for I Schoolers to share information about interesting, I School-ish classes in other departments at UC Berkeley.</p>
+<p>UC Berkeley is a big place, with so many interesting things going on. The I School is an interdisciplinary program, with students with a wide variety of interests, which benefits from exposure to other departments on campus. However, we've found that it's hard to hear about classes in other departments, especially before the semester gets going. When we have managed to hear about and take external classes, it was usually through the in-person recommendations of alumni and second-year students. ClassShare is a venue to formalize those knowledge transfers and make them accessible to all I Schoolers through course postings and reviews.</p>
+
+<!---
 <div id="splash">
 <p>Have the sneaking suspicion that there are cool, ISchool-ish courses all over the place that you'll never hear about until it's too late?</p>
 
@@ -25,6 +72,6 @@ Or just <a href="{% url courses %}">look through all of them</a>!
 <input name="course-stub" placeholder="Start typing the course's department code and number"></input>
 <input type='submit' value="Enter"></input>
 </form>
-</div>
+</div> -->
 
 {% endblock content %}

@@ -91,13 +91,32 @@ h1 {
 #content {
     clear: both;
     margin-top: 0;
-    padding: 10px 20px 20px 20px;
+    padding: 15px 20px 20px 20px;
     background: white;
     }
     
-#splash {
-    font-size: 1.4em;
-    padding: 0 30px;
+.three-column {
+    clear: both;
+}
+
+.col {
+    width: 32%;
+    margin-right: 10px;
+    float: left;
+    display: block;
+    padding: 0 3px 5px 3px;
+}
+
+.col3 {
+    float: none;
+    margin-left: 68%;
+}
+
+#footer {
+    margin-top: 20px;
+    background: white;
+    padding: 15px 20px;
+    font-size: .9em;
 }
 
 /* MESSAGES & ERRORS */
