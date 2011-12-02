@@ -95,9 +95,28 @@ h1 {
     background: white;
     }
     
-#splash {
-    font-size: 1.4em;
-    padding: 0 30px;
+.three-column {
+    
+}
+
+.col {
+    width: 30%;
+    margin-right: 22px;
+    float: left;
+    display: block;
+    padding-bottom: 20px;
+}
+
+.col3 {
+    float: none;
+    margin-left: 70%
+}
+
+#footer {
+    margin-top: 20px;
+    background: white;
+    padding: 15px 20px;
+    font-size: .9em;
 }
 
 /* MESSAGES & ERRORS */

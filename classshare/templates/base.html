@@ -37,7 +37,7 @@
             <ul id="nav">
                 <a href="{% url home %}"><li>Home</li></a>
                 <a href="{% url courses %}"><li>Find a class</li></a>
-                <a href="{% url courses %}"><li>Review a class</li></a>
+                <a href="{% url courses %}"><li>Write a review</li></a>
             </ul>
             
             <div id="content">
@@ -53,6 +53,17 @@
             {% endblock content %}
             </div>
             <div id="footer">
+            <div class="three-column">
+                <div class="col col1">
+                ClassShare is an independent study project by <a href="http://www.rowyn.com">Rowyn McDonald</a>, <a href="http://www.ischool.berkeley.edu/people/students/monicarosenberg">Monica Rosenberg</a>, and <a href="http://www.littlegreenriver.com">Karen Rustad</a> for the <a href="http://www.ischool.berkeley.edu">UC Berkeley I School</a>.</div>
+               <div class="col col2"> 
+               Powered by <a href="http://www.djangoproject.com">Django</a>. 
+               </div>
+               <div class="col col3">
+                <a href="https://github.com/aldeka/classshare">Patches welcome.</a> :-)
+                </div>
+                &nbsp;
+            </div>
             </div>
         </div>
     </body>
