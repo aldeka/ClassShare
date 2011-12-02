@@ -2,9 +2,9 @@
 
 {% block content %}
 <h2>{% if is_new_review %}Add{% else %}Edit{% endif %} review of {{ class.course.course_code }}</h2>
-<form method="post" action="{% if is_new_review %}{% url review_course class.id %}{% else %}{% url edit_review class.id review.id %}{% endif %}">
+<form method="post" action="{% if is_new_review %}{% url review_course class.id %}{% else %}{% url edit_review class.id review_id %}{% endif %}">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Save"></input>
+    <input type="submit" name="save" value="Save"></input> <input type="submit" name="delete" value="Delete"></input>
 </form>
 {% endblock content %}

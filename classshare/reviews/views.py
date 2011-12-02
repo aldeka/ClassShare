@@ -67,7 +67,6 @@ def add_course(request):
     return render(request, 'reviews/add_course_form.html', { 'form': form })
 
 # Do we actually want people to have this ability?
-# Maybe only the person who created it? But we don't save that...
 @login_required
 def edit_course(request, course_id):
     #TODO: This method's template doesn't exist yet, but should inherit the add_course_form.
@@ -121,13 +120,19 @@ def review_course(request, class_id):
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            new_review = form.save()
+            review, created = Class.objects.get_or_create(
+                author = form.cleaned_data["author"],
+                reviewed_class = form.cleaned_data["reviewed_class"],
+                content = form.cleaned_data["content"],
+                is_anonymous = form.cleaned_data["is_anonymous"],
+                thumbs_up = form.cleaned_data["thumbs_up"])
             course_id = new_review.reviewed_class.course.id
-            messages.success("Added new review for %s" % course)
+            messages.success(request, "Added new review for %s" % course)
             return redirect("course", course_id)
     else:
-        form = ReviewForm(initial={'author': request.user, 'reviewed_class': class_id})
-    return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class, 'is_new_review' : True })
+        form = ReviewForm(initial={'author': request.user, 'reviewed_class': reviewed_class})
+    return render(request, 'reviews/review_form.html',
+                  {'form': form, 'class': reviewed_class, 'is_new_review' : True })
     
 @login_required
 def edit_review(request, class_id, review_id):
@@ -135,14 +140,22 @@ def edit_review(request, class_id, review_id):
     reviewed_class = review.reviewed_class
     course = reviewed_class.course
     if request.method =="POST":
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("course", course.id)
+        if not request.user == review.author:
+            return HttpResponseForbidden()
+        if 'save' in request.POST:
+            form = ReviewForm(request.POST, instance=review)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Review updated.")
+        elif 'delete' in request.POST:
+            review.delete()
+            messages.success(request, "Review deleted.")
+        return redirect("course", course.id)
     elif request.user == review.author:
         # take them to the edit form
         form = ReviewForm(instance=review)
-        return render(request, 'reviews/review_form.html', {'form': form, 'class' : reviewed_class, 'is_new_review' : False })
+        return render(request, 'reviews/review_form.html',
+                      {'form': form, 'class' : reviewed_class, 'review_id': review_id, 'is_new_review' : False })
     else:
         return HttpResponseForbidden()
 
@@ -159,7 +172,7 @@ def course(request, course_id):
     for reviewed_class in course.class_set.all():
         instructors.add(reviewed_class.instructor)
     course.instructors = list(instructors)
-    return render(request, 'reviews/single_course.html', {'course': course, 'logged_in_user': user})
+    return render(request, 'reviews/single_course.html', {'course': course})
 
 @login_required
 def departments(request):
