@@ -66,12 +66,21 @@ def add_course(request):
         form = CourseForm()
     return render(request, 'reviews/add_course_form.html', { 'form': form })
 
+# Do we actually want people to have this ability?
+# Maybe only the person who created it? But we don't save that...
 @login_required
 def edit_course(request, course_id):
     #TODO: This method's template doesn't exist yet, but should inherit the add_course_form.
     course = Course.objects.get(pk=course_id)
-    form = CourseForm(instance=course)
-    return render(request, 'reviews/edit_course_form.html', {'form': form })
+    if request.method == "POST":
+        form = CourseForm(request.POST, instance=course)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Edited course: %s" % course)
+            return redirect("course", course.id)
+    else:
+        form = CourseForm(instance=course)
+    return render(request, 'reviews/edit_course_form.html', {'form': form, 'course_id': course_id })
 
 @login_required
 def choose_course_to_review(request, course_set):
