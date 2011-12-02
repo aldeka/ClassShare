@@ -41,10 +41,6 @@ h1 {
     width: 100%;
 }
 
-#header a {
-    color: white;
-    }
-
 #title {
     float: left;
 }
@@ -62,6 +58,8 @@ h1 {
 
 #account-links {
     float: right;
+    background: white;
+    padding: 5px;
 }
 
 #nav {
