@@ -18,27 +18,28 @@
 </div>
 
 <div class="col col3">
+  {% if user.is_authenticated %}
+    <!-- Recent reviews go here -->
+  {% else %}
     <h3>Log in</h3>
         {% if form.errors %}
             <p>Your username and password didn't match, please try again.</p>
         {% endif %}
 
-        <form method="post" action=".">{% csrf_token %}
-            <p>
+        <form method="post" action="/login/">{% csrf_token %}
+	    <p>
                 <label for="id_username">Username:</label>
-                {{ form.username }}
+                <input id="id_username" type="text" name="username" maxlength="30" />
             </p>
             <p>
                 <label for="id_password">Password:</label>
-                {{ form.password }}
+                <input type="password" name="password" id="id_password" />
             </p>
-            {% if next %}
-                <input type="hidden" name="next" value="{{ next }}" />
-            {% else %}
-                <input type="hidden" name="next" value="{% url reviews.views.home %}" />
-            {% endif %}
+            <input type="hidden" name="next" value="/" />
             <input type="submit" value="login" />
         </form>
+   {% endif %}
+	
 </div>
 &nbsp;
 </div>
