@@ -5,7 +5,7 @@
 
 <h3>Details</h3>
 Full name: {{ course.name }}<br/>
-Description: {{ course.description }}
+Description: {{ course.description|linebreaks }}<br/>
 Department: <a href="{% url reviews.views.department course.department.abb %}">{{ course.department.name }}</a><br/>
 Instructors:<br/>
 {% for instructor in course.instructors %}
