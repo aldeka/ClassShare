@@ -121,7 +121,7 @@ def review_course(request, class_id):
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            review, created = Class.objects.get_or_create(
+            review, created = Review.objects.get_or_create(
                 author = form.cleaned_data["author"],
                 reviewed_class = form.cleaned_data["reviewed_class"],
                 content = form.cleaned_data["content"],
@@ -171,7 +171,9 @@ def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     instructors = set()
     for reviewed_class in course.class_set.all():
-        instructors.add(reviewed_class.instructor)
+        print reviewed_class.instructor
+        if reviewed_class.instructor:
+            instructors.add(reviewed_class.instructor)
     course.instructors = list(instructors)
     return render(request, 'reviews/single_course.html', {'course': course})
 
