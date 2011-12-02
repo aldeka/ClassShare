@@ -8,9 +8,11 @@ Full name: {{ course.name }}<br/>
 Description: {{ course.description|linebreaks }}<br/>
 Department: <a href="{% url reviews.views.department course.department.abb %}">{{ course.department.name }}</a><br/>
 Instructors:<br/>
-{% for instructor in course.instructors %}
-<a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a><br/>
-{% endfor %}
+{% if course.instructors %}
+  {% for instructor in course.instructors %}
+    <a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a><br/>
+  {% endfor %}
+{% endif %}
 Thumbs-up: {{ course.thumb_count }}
 
 <h3>Reviews</h3>
