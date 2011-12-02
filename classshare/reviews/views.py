@@ -23,7 +23,8 @@ def secure_required(view_func):
 
 def home(request):
     courses = Course.objects.all()
-    return render(request, 'index.html', {'courses' : courses })
+    recent_reviews = Review.objects.all().order_by('-timestamp')[:5]
+    return render(request, 'index.html', {'recent_reviews' : recent_reviews, 'courses' : courses })
 
 @login_required
 def add_or_review_course(request):

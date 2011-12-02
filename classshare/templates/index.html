@@ -18,14 +18,18 @@
 </div>
 
 <div class="col col3">
-  {% if user.is_authenticated %}
-    <!-- Recent reviews go here -->
-  {% else %}
-    <h3>Log in</h3>
+    <h3>{% if user.is_authenticated %}Recent reviews{% else %}Log in{% endif %}</h3>
+    {% if user.is_authenticated %}
+    <ul>
+        {% for review in recent_reviews %}
+        <li>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author }}{% endif %} reviewed {{ review.reviewed_class }} at {{ review.timestamp }}</li>
+        {% endfor %}
+    </ul>
+    <a href="">Write a review!</a>
+    {% else %}
         {% if form.errors %}
             <p>Your username and password didn't match, please try again.</p>
         {% endif %}
-
         <form method="post" action="/login/">{% csrf_token %}
 	    <p>
                 <label for="id_username">Username:</label>
@@ -38,41 +42,14 @@
             <input type="hidden" name="next" value="/" />
             <input type="submit" value="login" />
         </form>
-   {% endif %}
-	
+    {% endif %}
 </div>
-&nbsp;
 </div>
+
+<div class="clearer"></div>
 
 <h2>What is ClassShare?</h2>
 <p>ClassShare is a website for I Schoolers to share information about interesting, I School-ish classes in other departments at UC Berkeley.</p>
 <p>UC Berkeley is a big place, with so many interesting things going on. The I School is an interdisciplinary program, with students with a wide variety of interests, which benefits from exposure to other departments on campus. However, we've found that it's hard to hear about classes in other departments, especially before the semester gets going. When we have managed to hear about and take external classes, it was usually through the in-person recommendations of alumni and second-year students. ClassShare is a venue to formalize those knowledge transfers and make them accessible to all I Schoolers through course postings and reviews.</p>
-
-<!---
-<div id="splash">
-<p>Have the sneaking suspicion that there are cool, ISchool-ish courses all over the place that you'll never hear about until it's too late?</p>
-
-<p>Time to fix that!</p>
-
-<p>ClassShare is a place for ISchoolers to share information about neat classes in departments all over Berkeley's campus that we might be interested in taking.</p>
-</div>
-
-<div id="find-course">
-<h3>Look up a course:</h3>
-<ul>
-<li><a href="{% url departments %}">by department</a></li>
-<li><a href="{% url tags %}">by tag</a></li>
-<li><a href="#">by keyword</a></li>
-</ul>
-Or just <a href="{% url courses %}">look through all of them</a>!
-</div>
-
-<div id="review-course">
-<h3>Review a course you've taken:</h3>
-<form id="add-or-review-course" action="{% url add_or_review_course %}" method="post">{% csrf_token %}
-<input name="course-stub" placeholder="Start typing the course's department code and number"></input>
-<input type='submit' value="Enter"></input>
-</form>
-</div> -->
 
 {% endblock content %}

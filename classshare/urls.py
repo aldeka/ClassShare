@@ -32,7 +32,7 @@ urlpatterns = patterns('reviews.views',
     url(r'^students/(?P<student_id>\d+)/$', 'student', name='student'),
 
     url(r'^login/$', 'login', name='login'),
-    url(r'^logout/$', 'logout_page'),
+    url(r'^logout/$', 'logout_page', name='logout'),
 )
 
 urlpatterns += patterns('',
