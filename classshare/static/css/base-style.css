@@ -96,20 +96,20 @@ h1 {
     }
     
 .three-column {
-    
+    clear: both;
 }
 
 .col {
-    width: 30%;
-    margin-right: 22px;
+    width: 32%;
+    margin-right: 10px;
     float: left;
     display: block;
-    padding-bottom: 20px;
+    padding: 0 3px 5px 3px;
 }
 
 .col3 {
     float: none;
-    margin-left: 70%
+    margin-left: 68%;
 }
 
 #footer {
