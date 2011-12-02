@@ -95,6 +95,10 @@ h1 {
     background: white;
     }
     
+.clearer {
+    clear: both;
+}
+    
 .three-column {
     clear: both;
 }

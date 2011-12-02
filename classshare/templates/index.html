@@ -18,7 +18,15 @@
 </div>
 
 <div class="col col3">
-    <h3>Log in</h3>
+    <h3>{% if user.is_authenticated %}Recent reviews{% else %}Log in{% endif %}</h3>
+    {% if user.is_authenticated %}
+    <ul>
+        {% for review in recent_reviews %}
+        <li>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author }}{% endif %} reviewed {{ review.reviewed_class }} at {{ review.timestamp }}</li>
+        {% endfor %}
+    </ul>
+    <a href="">Write a review!</a>
+    {% else %}
         {% if form.errors %}
             <p>Your username and password didn't match, please try again.</p>
         {% endif %}
@@ -39,9 +47,12 @@
             {% endif %}
             <input type="submit" value="login" />
         </form>
+    {% endif %}
 </div>
 &nbsp;
 </div>
+
+<div class="clearer"></div>
 
 <h2>What is ClassShare?</h2>
 <p>ClassShare is a website for I Schoolers to share information about interesting, I School-ish classes in other departments at UC Berkeley.</p>
