@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>Courses:<h2>
-<ul>
-    {% for course in courses %}
-        <li><a href="{% url reviews.views.course course.pk %}">{{ course.course_code }} -- {{ course.name }}</a></li>
-    {% endfor %}
-</ul>
+{% include "reviews/course_block.html" %}
 {% endblock content %}

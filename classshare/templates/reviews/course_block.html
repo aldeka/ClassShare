@@ -1,0 +1,11 @@
+<ul class="course-list">
+    {% for course in courses %}
+        <li>
+	  <div><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+	  {% if course.description %}
+	  <div>{{ course.description|linebreaks|truncatewords:50 }}</div>
+	  {% endif %}
+	  <div>({{ course.review_count }} reviews) ({{ course.thumbs_count }} thumbs up)</div>
+	</li>
+    {% endfor %}
+</ul>

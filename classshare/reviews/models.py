@@ -37,20 +37,27 @@ class Course(models.Model):
     description = models.TextField(blank=True,null=True)
     department = models.ForeignKey(Department)
     number = models.CharField(max_length=12)
+    #units = models.IntegerField()
     
     def course_code(self):
         return self.department.abb + ' ' + self.number
     
     def __unicode__(self):
         return self.course_code()
+
+    def review_count(self):
+        reviews = 0
+        for cls in self.class_set.all():
+            reviews += len(cls.review_set.all())
+        return reviews
         
     def thumbs_count(self):
         '''Calculates how many thumbs-up the course has received'''
         thumbs = 0
         classes = self.class_set.all()
         for the_class in classes:
-            pos_reviews = the_class.review_set.filter
-            thumbs = thumbs + len(pos_reviews)
+            pos_reviews = the_class.review_set.filter(thumbs_up=True)
+            thumbs += len(pos_reviews)
         return thumbs
         
 class CourseForm(forms.ModelForm):
@@ -116,8 +123,8 @@ class Review(models.Model):
 
 class Tag(models.Model):
     '''Model for a user's tag for a course.'''
-    name = models.CharField(max_length=200)
-    review = models.ForeignKey(Review, null=True)
+    name = models.CharField(max_length=200, primary_key=True)
+    reviews = models.ManyToManyField(Review, null=True)
     
     class Meta:
         ordering = ['name']

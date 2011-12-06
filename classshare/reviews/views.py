@@ -139,9 +139,9 @@ def review_course(request, class_id):
 
 def add_tags(review, tag_list):
     for tag_string in tag_list:
-        tag, created = Tag.objects.get_or_create(
-            name = tag_string,
-            review = review)
+        tag, created = Tag.objects.get_or_create(name=tag_string)
+        if review not in tag.reviews.all():
+            tag.reviews.add(review)
 
     
 @login_required
@@ -164,7 +164,7 @@ def edit_review(request, class_id, review_id):
         return redirect("course", course.id)
     elif request.user == review.author:
         # take them to the edit form
-        tag_list = Tag.objects.filter(review=review)
+        tag_list = Tag.objects.filter(reviews=review) # Does this filter work?
         tag_string = ', '.join(tag.name for tag in tag_list)
         form = ReviewForm(instance=review, initial={'tags': tag_string})
         return render(request, 'reviews/review_form.html',
@@ -232,8 +232,12 @@ def tags(request):
     return render(request, 'reviews/tag_list.html', {'tags': tags})
 
 @login_required
-def tag(request, tag_id):
-    tag = get_object_or_404(Tag, pk=tag_id)
+def tag(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    courses = set()
+    for review in tag.reviews.all():
+        courses.add(review.reviewed_class.course)
+    tag.courses = list(courses)
     return render(request, 'reviews/single_tag.html', {'tag': tag})
 
 # TODO: Do we need this view?
