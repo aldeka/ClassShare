@@ -1,5 +1,17 @@
 {% extends "base.html" %}
 
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $("#accordion").accordion();
+  });
+  </script>
+{% endblock js %}
+
 {% block content %}
+
+<h2>Courses:<h2>
+
 {% include "reviews/course_block.html" %}
+
 {% endblock content %}
