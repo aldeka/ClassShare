@@ -30,7 +30,7 @@
     {% for review in class.review_set.all %}
         <div id="review-{{ review.pk }}" class="review">
             <div class="review-head">
-            {% if review.thumbs_up %}<span class="thumbs-up">b</span>{% endif %} <strong>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author.username }}{% endif %}</strong> took this course in <strong>{{ review.reviewed_class.semester_formatted }}</strong>:
+            {% if review.thumbs_up %}<span class="thumbs-up"><img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" align="left" /></span>{% endif %} <strong>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author.username }}{% endif %}</strong> took this course in <strong>{{ review.reviewed_class.semester_formatted }}</strong>:
             </div>
             <div class="review-content">{{ review.content|linebreaksbr }}</div>
             <div class="review-foot">

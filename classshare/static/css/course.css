@@ -21,9 +21,14 @@
     background: #C2D0D9;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    padding: 5px;
+    padding: 10px;
     margin-bottom: 5px;
     font-style: italic;
+}
+
+.thumbs-up img {
+    margin-top: -5px;
+    padding-right: 5px;
 }
 
 .review-foot {
