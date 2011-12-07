@@ -1,3 +1,32 @@
 .detail-label {
     font-weight: bold;
 }
+
+#details {
+    font-size: 1.1em;
+}
+
+#details h3 {
+    font-size: 1em;
+}
+
+.review {
+    margin-bottom: 10px;
+    border-bottom: 1pt solid #C2D0D9;
+    padding-bottom: 4px;
+}
+
+.review-head {
+    font-size: 1.2em;
+    background: #C2D0D9;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 5px;
+    margin-bottom: 5px;
+    font-style: italic;
+}
+
+.review-foot {
+    font-size: .9em;
+    text-align: right;
+}
