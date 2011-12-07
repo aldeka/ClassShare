@@ -1,19 +1,29 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block css %}
+{{ block.super }}
+<link href="{{ STATIC_PREFIX }}css/course.css" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
 {% block content %}
 <h2>Course: {{ course.course_code }}</h2>
 
+<div class="module">
 <h3>Details</h3>
-Full name: {{ course.name }}<br/>
-Description: {{ course.description|linebreaks }}<br/>
-Department: <a href="{% url reviews.views.department course.department.abb %}">{{ course.department.name }}</a><br/>
+<span class="detail-label">Full name:</span> {{ course.name }}<br/>
+<span class="detail-label">Description:</span> {{ course.description|linebreaksbr }}<br/>
+<span class="detail-label">Department:</span> <a href="{% url reviews.views.department course.department.abb %}">{{ course.department.name }}</a><br/>
 {% if course.instructors %}
-Instructors:<br/>
-  {% for instructor in course.instructors %}
-    <a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a><br/>
+<span class="detail-label">Instructor(s):</span> 
+  {% for instructor in course.all_instructors %}
+    <a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a>&nbsp;
   {% endfor %}
 {% endif %}
-Thumbs-up: {{ course.thumb_count }}
+<span class="detail-label">Thumbs-up:</span> {{ course.thumbs_count }}
+</div>
 
 <h3>Reviews</h3>
 {% for class in course.class_set.all %}
@@ -23,9 +33,7 @@ Thumbs-up: {{ course.thumb_count }}
             {% if review.thumbs_up %}Thumbs up icon goes here{% endif %}<br/>
             {% if review.is_anonymous %}Anonymous{% else %}{{ review.author.username }}{% endif %} took this course in {{ review.reviewed_class.semester_formatted }}:
             </div>
-            <div class="review-content">
-            {{ review.content|linebreaks }}
-            </div>
+            <div class="review-content">{{ review.content|linebreaks }}</div>
             {% if review.author == user %}
             <div class="review-foot">
             <a href="{% url edit_review class.id review.id %}">Edit or delete</a>

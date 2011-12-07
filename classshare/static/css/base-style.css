@@ -114,6 +114,13 @@ h1 {
     margin-left: 68%;
 }
 
+.module {
+    padding: 5px 10px;
+    border: 4px solid #C2D0D9;
+    border-radius: 10px;
+    margin-bottom: 15px;
+}
+
 #footer {
     margin-top: 20px;
     background: white;
