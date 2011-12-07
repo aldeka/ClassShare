@@ -5,7 +5,6 @@ from django import forms
 from django.contrib.auth.models import User
 import datetime
 
-
 class Instructor(models.Model):
     '''Model for a course instructor.'''
     name = models.CharField(max_length=200)
@@ -38,20 +37,27 @@ class Course(models.Model):
     description = models.TextField(blank=True,null=True)
     department = models.ForeignKey(Department)
     number = models.CharField(max_length=12)
+    #units = models.IntegerField()
     
     def course_code(self):
         return self.department.abb + ' ' + self.number
     
     def __unicode__(self):
         return self.course_code()
+
+    def review_count(self):
+        reviews = 0
+        for cls in self.class_set.all():
+            reviews += len(cls.review_set.all())
+        return reviews
         
     def thumbs_count(self):
         '''Calculates how many thumbs-up the course has received'''
         thumbs = 0
         classes = self.class_set.all()
         for the_class in classes:
-            pos_reviews = the_class.review_set.filter
-            thumbs = thumbs + len(pos_reviews)
+            pos_reviews = the_class.review_set.filter(thumbs_up=True)
+            thumbs += len(pos_reviews)
         return thumbs
         
 class CourseForm(forms.ModelForm):
@@ -93,11 +99,12 @@ class Class(models.Model):
         return datetime.date(self.year, month, 15)
 
 class ClassForm(forms.ModelForm):
-    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.HiddenInput()) 
+    course = forms.ModelChoiceField(queryset=Course.objects.all(), widget=forms.HiddenInput())
 
     class Meta:
         model = Class
         fields = ('course', 'year', 'semester', 'instructor')
+
 
 class Review(models.Model):
     '''Model for a single person's review of a course'''
@@ -114,20 +121,37 @@ class Review(models.Model):
     def __unicode__(self):
         return self.author.username + "'s review of " + str(self.reviewed_class)
 
-class ReviewForm(forms.ModelForm):
-    # TODO: Look up how to set user for form to current user.
-    # http://stackoverflow.com/questions/291945/how-do-i-filter-foreignkey-choices-in-a-django-modelform
-    author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
-    class Meta:
-        model = Review
-
 class Tag(models.Model):
     '''Model for a user's tag for a course.'''
-    name = models.CharField(max_length=200)
-    review = models.ForeignKey(Review, null=True)
+    name = models.CharField(max_length=200, primary_key=True)
+    reviews = models.ManyToManyField(Review, null=True)
     
     class Meta:
         ordering = ['name']
     
     def __unicode__(self):
-        return 'Tag: ' + self.name
+        return self.name
+
+
+class MultiStringField(forms.CharField):
+    """Form field for comma-separated values such as tags."""
+
+    def to_python(self, value):
+        "Normalize data to a list of strings."
+
+        # Return an empty list if no input was given.
+        if not value:
+            return []
+        # Convert to lower case and trim whitespace
+        return [s.strip() for s in value.lower().split(',')]
+
+
+class ReviewForm(forms.ModelForm):
+    # TODO: Look up how to set user for form to current user.
+    # http://stackoverflow.com/questions/291945/how-do-i-filter-foreignkey-choices-in-a-django-modelform
+    author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
+    tags = MultiStringField()
+    class Meta:
+        model = Review
+
+

@@ -5,11 +5,7 @@
 
 <h3><a href="{{department.link}}">{{ department.name }}</a></h3>
 
-
 <h3>Courses</h3>
-<ul>
-{% for course in department.course_set.all %}
-  <li><a href="{% url reviews.views.course course.pk %}">{{ department.abb }} {{ course.number }}</a>: {{ course.name }}</li>
-{% endfor %}
+{% include "reviews/course_block.html" with courses=department.course_set.all %}
 
 {% endblock content %}

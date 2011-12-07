@@ -24,7 +24,7 @@ urlpatterns = patterns('reviews.views',
     url(r'^instructors/(?P<instructor_id>\d+)/$', 'instructor', name='instructor'),
     
     url(r'^tags/$', 'tags', name='tags'),
-    url(r'^tags/(?P<tag_id>\d+)/$', 'tag', name='tag'),
+    url(r'^tags/(?P<tag_name>\w+)/$', 'tag', name='tag'),
     
     url(r'^allreviews/$', 'reviews', name='reviews'),
     

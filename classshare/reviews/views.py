@@ -121,19 +121,28 @@ def review_course(request, class_id):
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
-            review, created = Class.objects.get_or_create(
+            review, created = Review.objects.get_or_create(
                 author = form.cleaned_data["author"],
                 reviewed_class = form.cleaned_data["reviewed_class"],
                 content = form.cleaned_data["content"],
                 is_anonymous = form.cleaned_data["is_anonymous"],
                 thumbs_up = form.cleaned_data["thumbs_up"])
-            course_id = new_review.reviewed_class.course.id
+            add_tags(review, form.cleaned_data["tags"])
+            course_id = review.reviewed_class.course.id
             messages.success(request, "Added new review for %s" % course)
             return redirect("course", course_id)
     else:
         form = ReviewForm(initial={'author': request.user, 'reviewed_class': reviewed_class})
+    # May also want to pass forward list of all tags for autocomplete
     return render(request, 'reviews/review_form.html',
                   {'form': form, 'class': reviewed_class, 'is_new_review' : True })
+
+def add_tags(review, tag_list):
+    for tag_string in tag_list:
+        tag, created = Tag.objects.get_or_create(name=tag_string)
+        if review not in tag.reviews.all():
+            tag.reviews.add(review)
+
     
 @login_required
 def edit_review(request, class_id, review_id):
@@ -146,7 +155,8 @@ def edit_review(request, class_id, review_id):
         if 'save' in request.POST:
             form = ReviewForm(request.POST, instance=review)
             if form.is_valid():
-                form.save()
+                review = form.save()
+                add_tags(review, form.cleaned_data["tags"])
                 messages.success(request, "Review updated.")
         elif 'delete' in request.POST:
             review.delete()
@@ -154,7 +164,9 @@ def edit_review(request, class_id, review_id):
         return redirect("course", course.id)
     elif request.user == review.author:
         # take them to the edit form
-        form = ReviewForm(instance=review)
+        tag_list = Tag.objects.filter(reviews=review) # Does this filter work?
+        tag_string = ', '.join(tag.name for tag in tag_list)
+        form = ReviewForm(instance=review, initial={'tags': tag_string})
         return render(request, 'reviews/review_form.html',
                       {'form': form, 'class' : reviewed_class, 'review_id': review_id, 'is_new_review' : False })
     else:
@@ -171,7 +183,8 @@ def course(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     instructors = set()
     for reviewed_class in course.class_set.all():
-        instructors.add(reviewed_class.instructor)
+        if reviewed_class.instructor:
+            instructors.add(reviewed_class.instructor)
     course.instructors = list(instructors)
     return render(request, 'reviews/single_course.html', {'course': course})
 
@@ -219,8 +232,12 @@ def tags(request):
     return render(request, 'reviews/tag_list.html', {'tags': tags})
 
 @login_required
-def tag(request, tag_id):
-    tag = get_object_or_404(Tag, pk=tag_id)
+def tag(request, tag_name):
+    tag = get_object_or_404(Tag, name=tag_name)
+    courses = set()
+    for review in tag.reviews.all():
+        courses.add(review.reviewed_class.course)
+    tag.courses = list(courses)
     return render(request, 'reviews/single_tag.html', {'tag': tag})
 
 # TODO: Do we need this view?
