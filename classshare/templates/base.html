@@ -8,14 +8,13 @@
         
         {% block css %}
         <link href="{{ STATIC_PREFIX }}css/base-style.css" rel="stylesheet" type="text/css" />
-	{% endblock css %}
-		<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>        
-		{% endblock css %}
-       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
-		  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
+	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>        
+	{% endblock %}
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
         {% block js %}
 		
-        {% endblock js %}
+        {% endblock %}
 
 	{% block title %}
 	<title>ClassShare</title>
