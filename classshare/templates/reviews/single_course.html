@@ -1,36 +1,43 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block css %}
+{{ block.super }}
+<link href="{{ STATIC_PREFIX }}css/course.css" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
 {% block content %}
 <h2>Course: {{ course.course_code }}</h2>
 
+<div id="details" class="module">
 <h3>Details</h3>
-Full name: {{ course.name }}<br/>
-Description: {{ course.description|linebreaks }}<br/>
-Department: <a href="{% url reviews.views.department course.department.abb %}">{{ course.department.name }}</a><br/>
+<span class="detail-label">Full name:</span> {{ course.name }}<br/>
+<span class="detail-label">Department:</span> <a href="{% url reviews.views.department course.department.abb %}">{{ course.department.name }}</a><br/>
 {% if course.instructors %}
-Instructors:<br/>
-  {% for instructor in course.instructors %}
-    <a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a><br/>
-  {% endfor %}
+<span class="detail-label">Instructor(s):</span> 
+  {% for instructor in course.all_instructors %}
+    <a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a>&nbsp;
+  {% endfor %}<br/>
 {% endif %}
-Thumbs-up: {{ course.thumb_count }}
+<span class="detail-label">Description:</span> {{ course.description|linebreaksbr }}<br/>
+<span class="detail-label">{{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" /></span>
+</div>
 
 <h3>Reviews</h3>
 {% for class in course.class_set.all %}
     {% for review in class.review_set.all %}
         <div id="review-{{ review.pk }}" class="review">
             <div class="review-head">
-            {% if review.thumbs_up %}Thumbs up icon goes here{% endif %}<br/>
-            {% if review.is_anonymous %}Anonymous{% else %}{{ review.author.username }}{% endif %} took this course in {{ review.reviewed_class.semester_formatted }}:
+            {% if review.thumbs_up %}<span class="thumbs-up"><img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" align="left" /></span>{% endif %} <strong>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author.username }}{% endif %}</strong> took this course in <strong>{{ review.reviewed_class.semester_formatted }}</strong>:
             </div>
-            <div class="review-content">
-            {{ review.content|linebreaks }}
-            </div>
-            {% if review.author == user %}
+            <div class="review-content">{{ review.content|linebreaksbr }}</div>
             <div class="review-foot">
-            <a href="{% url edit_review class.id review.id %}">Edit or delete</a>
-            </div>
+            {% if review.author == user %}
+            <a href="{% url edit_review class.id review.id %}">Edit or delete review</a>
             {% endif %}
+            </div>
         </div>
     {% endfor %}
 {% endfor %}

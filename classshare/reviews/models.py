@@ -51,6 +51,14 @@ class Course(models.Model):
             reviews += len(cls.review_set.all())
         return reviews
         
+    def all_instructors(self):
+        '''Returns all the instructors that have ever taught the course'''
+        instructors = []
+        for the_class in self.class_set.all():
+            if the_class.instructor not in instructors:
+                instructors.append(the_class.instructor)
+        return instructors
+        
     def thumbs_count(self):
         '''Calculates how many thumbs-up the course has received'''
         thumbs = 0
