@@ -37,7 +37,7 @@ class Course(models.Model):
     description = models.TextField(blank=True,null=True)
     department = models.ForeignKey(Department)
     number = models.CharField(max_length=12)
-    #units = models.IntegerField()
+    units = models.IntegerField(blank=True,null=True)
     
     def course_code(self):
         return self.department.abb + ' ' + self.number
@@ -59,6 +59,34 @@ class Course(models.Model):
             pos_reviews = the_class.review_set.filter(thumbs_up=True)
             thumbs += len(pos_reviews)
         return thumbs
+
+def get_courses(department=None, instructor=None, semester=None, tags=[],
+                units=None, year=None):
+    """Retrieve courses matching various filters specified by the user.
+    Arguments:
+      department: Department object
+      instructor: Instructor object
+      semester: String representing the semester, e.g. "Fall"
+      tags: list of tag strings or tag objects
+      units: Integer representing number of units
+      year: Integer representing year class was offered."""
+    courses = Course.objects.all()
+    if department:
+        courses = courses.filter(department=department)
+    if instructor:
+        courses = courses.filter(instructor=instructor)
+    if semester:
+        semester = semester.capitalize()
+        courses = courses.filter(class__semester=semester)
+    if tags:
+        courses = courses.filter(class__review__tag__name__in=tags)
+    if units:
+        courses = courses.filter(units=units)
+    if year:
+        courses = courses.filter(class__year__exact=year)
+    return courses
+        
+
         
 class CourseForm(forms.ModelForm):
     class Meta:
@@ -153,5 +181,3 @@ class ReviewForm(forms.ModelForm):
     tags = MultiStringField()
     class Meta:
         model = Review
-
-
