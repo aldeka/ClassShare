@@ -1,5 +1,13 @@
 {% extends "base.html" %}
 
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block css %}
+{{ block.super }}
+<link href="{{ STATIC_PREFIX }}css/splash.css" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
 {% block content %}
 <div class="three-column">
 
@@ -11,9 +19,9 @@
 <div class="col col2">
     <h3>Top reviewed classes:</h3>
     <ol>
-        <li>MBA 270 - Underwater Businessweaving</li>
-        <li>CS 160 - UI Stuff</li>
-        <li>ENV 223 - Design Concepts </li>
+        {% for course in most_reviewed_courses %}
+        <li>{{ course }} - {{ course.name }}</li>
+        {% endfor %}
     </ol>
 </div>
 
