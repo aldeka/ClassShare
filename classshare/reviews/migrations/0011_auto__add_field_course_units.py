@@ -8,60 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting model 'Student'
-        db.delete_table('reviews_student')
-
-        # Adding model 'UserProfile'
-        db.create_table('reviews_userprofile', (
-            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-            ('is_student', self.gf('django.db.models.fields.BooleanField')(default=True)),
-            ('is_alumnus', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('reviews', ['UserProfile'])
-
-        # Changing field 'Review.author'
-        db.alter_column('reviews_review', 'author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'], null=True))
-
-        # Deleting field 'Course.ccn'
-        db.delete_column('reviews_course', 'ccn')
-
-        # Deleting field 'Department.id'
-        db.delete_column('reviews_department', 'id')
-
-        # Changing field 'Department.abb'
-        db.alter_column('reviews_department', 'abb', self.gf('django.db.models.fields.CharField')(max_length=10, primary_key=True))
-
-        # Adding unique constraint on 'Department', fields ['abb']
-        db.create_unique('reviews_department', ['abb'])
+        # Adding field 'Course.units'
+        db.add_column('reviews_course', 'units', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Removing unique constraint on 'Department', fields ['abb']
-        db.delete_unique('reviews_department', ['abb'])
-
-        # Adding model 'Student'
-        db.create_table('reviews_student', (
-            ('user_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
-            ('is_alumnus', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        ))
-        db.send_create_signal('reviews', ['Student'])
-
-        # Deleting model 'UserProfile'
-        db.delete_table('reviews_userprofile')
-
-        # Changing field 'Review.author'
-        db.alter_column('reviews_review', 'author_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['reviews.Student'], null=True))
-
-        # Adding field 'Course.ccn'
-        db.add_column('reviews_course', 'ccn', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True), keep_default=False)
-
-        # Adding field 'Department.id'
-        db.add_column('reviews_department', 'id', self.gf('django.db.models.fields.AutoField')(default=0, primary_key=True), keep_default=False)
-
-        # Changing field 'Department.abb'
-        db.alter_column('reviews_department', 'abb', self.gf('django.db.models.fields.CharField')(max_length=10))
+        # Deleting field 'Course.units'
+        db.delete_column('reviews_course', 'units')
 
 
     models = {
@@ -103,7 +57,6 @@ class Migration(SchemaMigration):
         },
         'reviews.class': {
             'Meta': {'ordering': "['-year']", 'object_name': 'Class'},
-            'ccn': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
             'course': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['reviews.Course']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'instructor': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['reviews.Instructor']", 'null': 'True', 'blank': 'True'}),
@@ -117,7 +70,7 @@ class Migration(SchemaMigration):
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '200'}),
             'number': ('django.db.models.fields.CharField', [], {'max_length': '12'}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'to': "orm['reviews.Tag']", 'null': 'True', 'blank': 'True'})
+            'units': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'})
         },
         'reviews.department': {
             'Meta': {'ordering': "['abb']", 'object_name': 'Department'},
@@ -132,7 +85,7 @@ class Migration(SchemaMigration):
         },
         'reviews.review': {
             'Meta': {'ordering': "['-timestamp']", 'object_name': 'Review'},
-            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True', 'blank': 'True'}),
+            'author': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']", 'null': 'True'}),
             'content': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_anonymous': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -142,15 +95,8 @@ class Migration(SchemaMigration):
         },
         'reviews.tag': {
             'Meta': {'ordering': "['name']", 'object_name': 'Tag'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        },
-        'reviews.userprofile': {
-            'Meta': {'object_name': 'UserProfile'},
-            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_alumnus': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_student': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['auth.User']", 'unique': 'True'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '200', 'primary_key': 'True'}),
+            'reviews': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['reviews.Review']", 'null': 'True', 'symmetrical': 'False'})
         }
     }
 
