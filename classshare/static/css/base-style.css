@@ -126,6 +126,11 @@ h1 {
     margin-bottom: 15px;
 }
 
+.thumbs-up img {
+    margin-bottom: -5px;
+    padding-right: 5px;
+}
+
 #footer {
     margin-top: 20px;
     background: white;
