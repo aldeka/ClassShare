@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block js %}
+    {{ block.super }}
 <script>
   $(document).ready(function() {
     $("#accordion").accordion();
@@ -10,8 +11,14 @@
 
 {% block content %}
 
-<h2>Courses:</h2>
+<h2>All courses:</h2>
 
-{% include "reviews/course_block.html" %}
+<ul class="course-list">
+    {% for course in courses %}
+        <li>
+	  <div><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+	    </li>
+	{% endfor %}
+</ul>
 
 {% endblock content %}

@@ -173,6 +173,13 @@ def edit_review(request, class_id, review_id):
         return HttpResponseForbidden()
 
 @login_required
+def find_course(request):
+    courses = Course.objects.all()
+    departments = Department.objects.all()
+    tags = Tag.objects.all()
+    return render(request, 'reviews/find_course.html', {'courses' : courses, 'tags' : tags, 'departments' : departments})
+
+@login_required
 def courses(request):
     courses = Course.objects.all()
     return render(request, 'reviews/course_list.html', {'courses' : courses})

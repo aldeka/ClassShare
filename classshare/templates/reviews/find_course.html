@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% block js %}
+<script>
+  $(document).ready(function() {
+    $("#accordion").accordion();
+  });
+  </script>
+{% endblock js %}
+
+{% block css %}
+{{ block.super }}
+<link href="{{ STATIC_PREFIX }}css/course-finder.css" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
+{% block content %}
+
+<h2>Find a course:</h2>
+
+<div id="facet-search">
+    <h3>Filter by:</h3>
+    <div id="accordion">
+        <h3><a href="#">Department</a></h3>
+        <div>
+            <ul>
+            {% for department in departments %}
+            <li>{{ department.name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+        <h3><a href="#">Tag</a></h3>
+        <div>
+            <ul>
+            {% for tag in tags %}
+            <li>{{ tag.name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+
+<ul class="course-list">
+    {% for course in courses %}
+    <li>
+	  <div><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+	  {% if course.description %}
+	  <div>{{ course.description|linebreaks|truncatewords:50 }}</div>
+	  {% endif %}
+	  <div>({{ course.review_count }} reviews) ({{ course.thumbs_count }} thumbs up)</div>
+	</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

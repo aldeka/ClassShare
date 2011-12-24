@@ -6,7 +6,7 @@ admin.autodiscover()
 urlpatterns = patterns('reviews.views',
     url(r'^$', 'home', name='home'),
     url(r'^courses/$', 'courses', name='courses'),
-    
+    url(r'^courses/find/$', 'find_course', name='find_course'),
     url(r'^courses/add_or_review/$', 'add_or_review_course', name='add_or_review_course'),
     url(r'^courses/add/$', 'add_course', name='add_course'),
     
