@@ -138,6 +138,10 @@ h1 {
     font-size: .9em;
 }
 
+.hidden {
+    display: none;
+    }
+
 /* MESSAGES & ERRORS */
 
 ul.messages {

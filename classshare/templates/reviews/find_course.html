@@ -25,21 +25,35 @@
 <h2>Find a class:</h2>
 
 <div id="facet-search">
+
+    <div id="active-filters" class="hidden">
+        <h3>Active filters:</h3>
+        <ul class="ui-widget ui-accordion-content ui-widget-content">
+        </ul>
+    </div>
     <h3>Filter by:</h3>
     <div id="accordion">
         <h3><a href="#">Department</a></h3>
-        <div class="filters">
+        <div id="dept-filters" class="filters">
             <ul>
             {% for department in departments %}
-            <li id="dept-{{ department.abb }}-filter"><a href="#" data-filter=".dept-{{ department.abb }}"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /> {{ department.name }}</a></li>
+            <li id="dept-{{ department.abb }}-filter">
+                <a href="#" data-filter=".dept-{{ department.abb }}">
+                <span class="add-or-remove"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /></span> {{ department.name }}
+                </a>
+            </li>
             {% endfor %}
             </ul>
         </div>
         <h3><a href="#">Tag</a></h3>
-        <div class="filters">
+        <div id="tag-filters" class="filters">
             <ul>
             {% for tag in tags %}
-            <li id="tag-{{ tag.name }}-filter"><a href="#" data-filter=".tag-{{ tag.name }}">{{ tag.name }}</a></li>
+            <li id="tag-{{ tag.name }}-filter">
+                <a href="#" data-filter=".tag-{{ tag.name }}">
+                <span class="add-or-remove"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /></span>{{ tag.name }}
+                </a>
+            </li>
             {% endfor %}
             </ul>
         </div>
@@ -48,7 +62,7 @@
 
 <ul id="course-list">
     {% for course in courses %}
-    <li class="course dept-{{ course.department.abb }} {% for tag in course.class_set.review_set.tags.all %}tag-{{ tag.name }} {% endfor %}{% if course.class_set.review_set.all.length > 0 %}is-reviewed{% endif %}">
+    <li class="course dept-{{ course.department.abb }} {% for tag in course.class_set.review_set.tag_set.all %}tag-{{ tag.name }} {% endfor %}{% if course.class_set.review_set.all.length > 0 %}is-reviewed{% endif %}">
       <div class="course-header">
 	      <div class="course-title"><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
 	      &nbsp;
@@ -68,11 +82,48 @@
         itemSelector : '.course'
       });
       
-      $('.filters a').click(function(){
-          var selector = $(this).attr('data-filter');
-          $container.isotope({ filter: selector });
-          return false;
+      var currentFilters = [];
+      
+      $('.filters a').live('click', function(){
+        var newSelector = $(this).attr('data-filter');
+        
+        if (currentFilters.length < 1) {
+            $('#active-filters').toggleClass('hidden');
+        }
+        
+        currentFilters.push(newSelector);
+        var newFilter = $(this).parent();
+        $(this).parent().remove();
+        
+        $('#active-filters ul').append(newFilter);
+        
+        $container.isotope({ filter: listToSelector(currentFilters) });
+        event.preventDefault();
       });
+      
+      $('#active-filters a').live('click', function() {
+        var removedSelector = $(this).attr('data-filter');
+        var oldFilter = $(this).parent();
+        $(this).parent().remove();
+        // get the div of filters that this belongs to, since there's multiple
+        var targetFilterDiv = '#' + removedSelector.split('-')[0].slice(1) + '-filters';
+        $(targetFilterDiv + ' ul').append(oldFilter);
+        // remove the old selector from the list of filters
+        currentFilters.splice(currentFilters.indexOf(removedSelector),1);
+        $container.isotope({ filter: listToSelector(currentFilters) });
+        if (currentFilters.length < 1) {
+            $('#active-filters').toggleClass('hidden');
+        }
+        event.preventDefault();
+      });
+      
+      function listToSelector(list) {
+        var selector = '';
+        for (x in currentFilters) {
+            selector = selector + currentFilters[x] + ':';
+        }
+        return selector;
+      };
 </script>
 
 {% endblock content %}
