@@ -22,47 +22,56 @@
 
 {% block content %}
 
-<h2>Find a course:</h2>
+<h2>Find a class:</h2>
 
 <div id="facet-search">
     <h3>Filter by:</h3>
     <div id="accordion">
         <h3><a href="#">Department</a></h3>
         <div>
-            <ul>
+            <ul class="filters">
             {% for department in departments %}
-            <li id="dept-{{ department.abb }}"><a href="#">{{ department.name }}</a></li>
+            <li id="dept-{{ department.abb }}-filter"><a href="#" data-filter=".dept-{{ department.abb }}">{{ department.name }}</a></li>
             {% endfor %}
             </ul>
         </div>
         <h3><a href="#">Tag</a></h3>
         <div>
-            <ul>
+            <ul class="filters">
             {% for tag in tags %}
-            <li id="tag-{{ tag.name }}"><a href="#">{{ tag.name }}</a></li>
+            <li id="tag-{{ tag.name }}-filter"><a href="#" data-filter=".tag-{{ tag.name }}">{{ tag.name }}</a></li>
             {% endfor %}
             </ul>
         </div>
     </div>
 </div>
 
-<ul class="course-list">
+<ul id="course-list">
     {% for course in courses %}
     <li class="course dept-{{ course.department.abb }} {% for tag in course.class_set.review_set.tags.all %}tag-{{ tag.name }} {% endfor %}{% if course.class_set.review_set.all.length > 0 %}is-reviewed{% endif %}">
-	  <div><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+      <div class="course-header">
+	      <div class="course-title"><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+	      &nbsp;
+	      <div class="course-stats">({{ course.review_count }} reviews) <span class="thumbs-up">({{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" />)</span></div>
+	  </div>
 	  {% if course.description %}
-	  <div>{{ course.description|linebreaks|truncatewords:50 }}</div>
+	  <div class="course-description">{{ course.description|linebreaks|truncatewords:50 }}</div>
 	  {% endif %}
-	  <div>({{ course.review_count }} reviews) <span class="thumbs-up">({{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" />)</span></div>
 	</li>
     {% endfor %}
 </ul>
 
 <script>
-var $container = $('.course-list');
+      var $container = $('#course-list');
 
       $container.isotope({
         itemSelector : '.course'
+      });
+      
+      $('.filters a').click(function(){
+          var selector = $(this).attr('data-filter');
+          $container.isotope({ filter: selector });
+          return false;
       });
 </script>
 

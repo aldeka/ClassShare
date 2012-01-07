@@ -3,6 +3,33 @@
     width: 200px;
 }
 
-.course-list {
+#course-list {
     margin-left: 220px;
+    list-style-type: none;
+    overflow: visible;
+    width: 600px;
+}
+
+.course {
+    width: 600px;
+    padding: 18px 0 5px 0;
+    border-bottom: 2px solid #eee;
+}
+
+.course-header {
+    display: block;
+    font-size: 1.2em;
+}
+
+.course-description {
+    clear: both;
+}
+
+.course-title {
+    float: left;
+}
+
+.course-stats {
+    float: right;
+    margin-top: -10px;
 }
