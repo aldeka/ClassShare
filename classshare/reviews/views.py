@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from reviews.models import *
+import copy
 import re
 
 def secure_required(view_func):
@@ -22,7 +23,7 @@ def secure_required(view_func):
 
 
 def home(request):
-    most_reviewed_courses = Course.objects.annotate
+    most_reviewed_courses = Course.objects.all()
     recent_reviews = Review.objects.all().order_by('-timestamp')[:5]
     return render(request, 'index.html', {'recent_reviews' : recent_reviews, 'most_reviewed_courses' : most_reviewed_courses })
 
@@ -97,7 +98,11 @@ def choose_course_to_review(request, course_set):
 def choose_class_to_review(request, course_id):
     course = Course.objects.get(pk=course_id)
     if request.method == "POST":
-        form = ClassForm(request.POST)
+        # Is there a better way to do this?
+        instructor, created = Instructor.objects.get_or_create(name = request.POST["instructor"])
+        data = copy.copy(request.POST)
+        data["instructor"] = instructor.pk
+        form = ClassForm(data)
         if form.is_valid():
             cls, created = Class.objects.get_or_create(
                 course = form.cleaned_data["course"],
