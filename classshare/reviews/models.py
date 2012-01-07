@@ -116,6 +116,7 @@ class Class(models.Model):
     
     class Meta:
         ordering = ['-year']
+        verbose_name_plural = "classes"
     
     def semester_formatted(self):
         '''Returns a nicely formatted semester string, e.g. "Fall 2008"'''
