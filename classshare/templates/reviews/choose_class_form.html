@@ -1,10 +1,33 @@
 {% extends "base.html" %}
-
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">var STATIC_PREFIX = "{{STATIC_PREFIX}}";</script>
+    <script type="text/javascript" src="{{ STATIC_PREFIX }}js/add_instructor.js"></script>
+{% endblock js %}
 {% block content %}
 <h2>When did you take {{ course.course_code }}?</h2>
 <form method="post" action="{% url reviews.views.choose_class_to_review course.pk %}">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Next"></input>
+    {{ form.non_field_errors }}
+    <div class="form-field">
+      {{ form.year.errors }}
+      <label for="id_year">Year:</label>
+      {{ form.year }}
+    </div>
+    <div class="form-field">
+      {{ form.semester.errors }}
+      <label for="id_semester">Semester:</label>
+      {{ form.semester }}
+    </div>
+    <div class="form-field">
+      {{ form.instructor.errors }}
+      <label for="id_instructor">Instructor:</label>
+      {{ form.instructor }}
+      <a href="#" class="add-another" id="add-instructor">
+	<img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" title="Add Instructor" alt="Add Instructor"/>
+      </a>
+    </div>
+    <input type="hidden" name="course" value="{{ course.pk }}" id="id_course" />
+    <input type="submit" value="Next" />
 </form>
 {% endblock content %}

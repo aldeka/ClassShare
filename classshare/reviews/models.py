@@ -141,6 +141,12 @@ class ClassForm(forms.ModelForm):
         model = Class
         fields = ('course', 'year', 'semester', 'instructor')
 
+    def __init__(self, *args, **kwargs):
+        super(ClassForm, self).__init__(*args, **kwargs)
+        # Reload instructor options when form is created, in case new ones have been added
+        self.fields['instructor'].queryset = Instructor.objects.all()
+
+
 
 class Review(models.Model):
     '''Model for a single person's review of a course'''
