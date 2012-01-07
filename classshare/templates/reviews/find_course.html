@@ -49,11 +49,14 @@
 <ul class="course-list">
     {% for course in courses %}
     <li class="course dept-{{ course.department.abb }} {% for tag in course.class_set.review_set.tags.all %}tag-{{ tag.name }} {% endfor %}{% if course.class_set.review_set.all.length > 0 %}is-reviewed{% endif %}">
-	  <div><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+      <div class="course-header">
+	      <div class="course-title"><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
+	      &nbsp;
+	      <div class="course-stats">({{ course.review_count }} reviews) <span class="thumbs-up">({{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" />)</span></div>
+	  </div>
 	  {% if course.description %}
-	  <div>{{ course.description|linebreaks|truncatewords:50 }}</div>
+	  <div class="course-description">{{ course.description|linebreaks|truncatewords:50 }}</div>
 	  {% endif %}
-	  <div>({{ course.review_count }} reviews) <span class="thumbs-up">({{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" />)</span></div>
 	</li>
     {% endfor %}
 </ul>
