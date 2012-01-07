@@ -3,6 +3,17 @@
     width: 200px;
 }
 
+#facet-search .filters {
+    padding: 0 10px;
+    font-size: .9em;
+}
+
+#facet-search .filters ul {
+    list-style-type: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
 #course-list {
     margin-left: 220px;
     list-style-type: none;

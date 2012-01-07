@@ -28,16 +28,16 @@
     <h3>Filter by:</h3>
     <div id="accordion">
         <h3><a href="#">Department</a></h3>
-        <div>
-            <ul class="filters">
+        <div class="filters">
+            <ul>
             {% for department in departments %}
-            <li id="dept-{{ department.abb }}-filter"><a href="#" data-filter=".dept-{{ department.abb }}">{{ department.name }}</a></li>
+            <li id="dept-{{ department.abb }}-filter"><a href="#" data-filter=".dept-{{ department.abb }}"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /> {{ department.name }}</a></li>
             {% endfor %}
             </ul>
         </div>
         <h3><a href="#">Tag</a></h3>
-        <div>
-            <ul class="filters">
+        <div class="filters">
+            <ul>
             {% for tag in tags %}
             <li id="tag-{{ tag.name }}-filter"><a href="#" data-filter=".tag-{{ tag.name }}">{{ tag.name }}</a></li>
             {% endfor %}
