@@ -29,24 +29,24 @@
     <div id="accordion">
         <h3><a href="#">Department</a></h3>
         <div>
-            <ul>
+            <ul class="filters">
             {% for department in departments %}
-            <li id="dept-{{ department.abb }}"><a href="#">{{ department.name }}</a></li>
+            <li id="dept-{{ department.abb }}-filter"><a href="#" data-filter=".dept-{{ department.abb }}">{{ department.name }}</a></li>
             {% endfor %}
             </ul>
         </div>
         <h3><a href="#">Tag</a></h3>
         <div>
-            <ul>
+            <ul class="filters">
             {% for tag in tags %}
-            <li id="tag-{{ tag.name }}"><a href="#">{{ tag.name }}</a></li>
+            <li id="tag-{{ tag.name }}-filter"><a href="#" data-filter=".tag-{{ tag.name }}">{{ tag.name }}</a></li>
             {% endfor %}
             </ul>
         </div>
     </div>
 </div>
 
-<ul class="course-list">
+<ul id="course-list">
     {% for course in courses %}
     <li class="course dept-{{ course.department.abb }} {% for tag in course.class_set.review_set.tags.all %}tag-{{ tag.name }} {% endfor %}{% if course.class_set.review_set.all.length > 0 %}is-reviewed{% endif %}">
       <div class="course-header">
@@ -62,10 +62,16 @@
 </ul>
 
 <script>
-var $container = $('.course-list');
+      var $container = $('#course-list');
 
       $container.isotope({
         itemSelector : '.course'
+      });
+      
+      $('.filters a').click(function(){
+          var selector = $(this).attr('data-filter');
+          $container.isotope({ filter: selector });
+          return false;
       });
 </script>
 

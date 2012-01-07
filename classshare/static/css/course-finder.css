@@ -3,7 +3,7 @@
     width: 200px;
 }
 
-.course-list {
+#course-list {
     margin-left: 220px;
     list-style-type: none;
     overflow: visible;
