@@ -25,7 +25,7 @@
 <span class="detail-label">{{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" /></span>
 </div>
 
-<h3>Reviews</h3>
+<h3>Reviews</h3><a href="{% url choose_class course.pk %}">Add review</a>
 {% for class in course.class_set.all %}
     {% for review in class.review_set.all %}
         <div id="review-{{ review.pk }}" class="review">
