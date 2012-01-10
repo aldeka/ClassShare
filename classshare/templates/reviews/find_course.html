@@ -51,7 +51,7 @@
             {% for tag in tags %}
             <li id="tag-{{ tag.name }}-filter">
                 <a href="#" data-filter=".tag-{{ tag.name }}">
-                <span class="add-or-remove"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /></span>{{ tag.name }}
+                <span class="add-or-remove"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /></span> {{ tag.name }}
                 </a>
             </li>
             {% endfor %}
@@ -75,6 +75,8 @@
     {% endfor %}
 </ul>
 
+<div class="clearer">&nbsp;</div>
+
 <script>
       var $container = $('#course-list');
 
@@ -86,7 +88,7 @@
       
       $('.filters a').live('click', function(){
         var newSelector = $(this).attr('data-filter');
-        
+        $(this).find('img').replaceWith('<img src="/static/img/icon_deletelink.gif" />');
         if (currentFilters.length < 1) {
             $('#active-filters').toggleClass('hidden');
         }
@@ -103,6 +105,7 @@
       
       $('#active-filters a').live('click', function() {
         var removedSelector = $(this).attr('data-filter');
+        $(this).find('img').replaceWith('<img src="/static/img/icon_addlink.gif" />');
         var oldFilter = $(this).parent();
         $(this).parent().remove();
         // get the div of filters that this belongs to, since there's multiple
