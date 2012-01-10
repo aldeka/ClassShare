@@ -5,6 +5,6 @@
 <form method="post" action="{% if is_new_review %}{% url review_course class.id %}{% else %}{% url edit_review class.id review_id %}{% endif %}">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" name="save" value="Save"></input> <input type="submit" name="delete" value="Delete"></input>
+    <input type="submit" name="save" value="Save"></input> {% if not is_new_review %}<input type="submit" name="delete" value="Delete"></input>{% endif %}
 </form>
 {% endblock content %}
