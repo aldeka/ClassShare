@@ -8,6 +8,9 @@ import datetime
 class Instructor(models.Model):
     '''Model for a course instructor.'''
     name = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ['name']
     
     def __unicode__(self):
         return self.name
@@ -55,7 +58,7 @@ class Course(models.Model):
         '''Returns all the instructors that have ever taught the course'''
         instructors = []
         for the_class in self.class_set.all():
-            if the_class.instructor not in instructors:
+            if the_class.instructor not in instructors and the_class.instructor is not None:
                 instructors.append(the_class.instructor)
         return instructors
         
