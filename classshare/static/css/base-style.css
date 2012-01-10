@@ -4,7 +4,7 @@ body {
     width: 100%;
     font-size: 12pt;
     font-family: Goudy, Palatino, 'Liberation Serif', serif;
-    background: #4D98B9;#82A0A6;
+    background: #4D98B9;
     color: #222;
 }
 
@@ -69,22 +69,25 @@ h1 {
 
 #nav {
     padding: 0;
-    margin: 0 0 5px 0;
+    margin: 0;
+    height: 50px;
+    width: 100%;
+    background: #ddd;#ADCCF9;
+    font-size: 1.2em;
 }
 
 #nav li {
-    font-size: 1.2em;
-    display: inline;
+    display: block;
+    float: left;
     list-style-type: none;
-    padding: 5px 15px 6px 15px;
-    margin-right: 5px;
-    background: #eee;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    padding: 7px 15px 8px 15px;
+    margin: 6px 0 0 10px;
+    background: #f6f6f6;
 }
 
-#nav li#active {
-    background: white;
+#nav a:hover li, a:active li {
+    background: #fff;
+    color: #E6602B;
 }
 
 #nav a:hover, a:active {
