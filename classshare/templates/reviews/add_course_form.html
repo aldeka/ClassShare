@@ -5,6 +5,6 @@
 <form method="post" action="{% url add_course %}">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="Enter"></input>
+    <input type="submit" class="button happy-button" value="Enter"></input>
 </form>
 {% endblock content %}

@@ -1,10 +1,18 @@
 {% extends "base.html" %}
 
+{% block css %}
+{{ block.super }}
+<link href="{{ STATIC_PREFIX }}css/review-form.css" rel="stylesheet" type="text/css" />
+{% endblock css %}
+
 {% block content %}
 <h2>{% if is_new_review %}Add{% else %}Edit{% endif %} review of {{ class.course.course_code }}</h2>
 <form method="post" action="{% if is_new_review %}{% url review_course class.id %}{% else %}{% url edit_review class.id review_id %}{% endif %}">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" name="save" value="Save"></input> {% if not is_new_review %}<input type="submit" name="delete" value="Delete"></input>{% endif %}
+<div class="clearer">&nbsp;</div>
+    <input type="submit" name="save" value="Save" class="button happy-button"></input> {% if not is_new_review %}<input type="submit" name="delete" value="Delete" class="button danger-button"></input>{% endif %}
 </form>
+
+<div class="clearer"></div>
 {% endblock content %}
