@@ -3,9 +3,13 @@
     width: 200px;
 }
 
+#active-filters ul li {
+    padding: 10px;
+    }
+
 #facet-search .filters, #facet-search #active-filters ul {
     padding: 0 10px;
-    font-size: .9em;
+    font-size: 12pt;
 }
 
 #facet-search .filters ul, #facet-search #active-filters ul {
