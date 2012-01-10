@@ -51,7 +51,7 @@
             {% for tag in tags %}
             <li id="tag-{{ tag.name }}-filter">
                 <a href="#" data-filter=".tag-{{ tag.name }}">
-                <span class="add-or-remove"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /></span>{{ tag.name }}
+                <span class="add-or-remove"><img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" /></span> {{ tag.name }}
                 </a>
             </li>
             {% endfor %}
