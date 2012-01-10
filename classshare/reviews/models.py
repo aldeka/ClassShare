@@ -71,6 +71,10 @@ class Course(models.Model):
             thumbs += len(pos_reviews)
         return thumbs
 
+    def tags(self):
+        return Tag.objects.filter(reviews__reviewed_class__course__id=self.pk)
+
+
 def get_courses(department=None, instructor=None, semester=None, tags=[],
                 units=None, year=None):
     """Retrieve courses matching various filters specified by the user.
