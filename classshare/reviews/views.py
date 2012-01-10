@@ -100,10 +100,13 @@ def choose_class_to_review(request, course_id):
     course = Course.objects.get(pk=course_id)
     if request.method == "POST":
         # Is there a better way to do this?
-        instructor, created = Instructor.objects.get_or_create(name = request.POST["instructor"])
-        data = copy.copy(request.POST)
-        data["instructor"] = instructor.pk
-        form = ClassForm(data)
+        if request.POST["new-instructor"] == "True":
+            instructor, created = Instructor.objects.get_or_create(name = request.POST["instructor"])
+            data = copy.copy(request.POST)
+            data["instructor"] = instructor.pk
+            form = ClassForm(data)
+        else:
+            form = ClassForm(request.POST)
         if form.is_valid():
             cls, created = Class.objects.get_or_create(
                 course = form.cleaned_data["course"],
