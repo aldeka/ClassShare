@@ -20,7 +20,7 @@
     <h3>Top reviewed classes:</h3>
     <ol>
         {% for course in most_reviewed_courses %}
-        <li>{{ course }} - {{ course.name }}</li>
+        <li><a href={% url course course.pk %}>{{ course }} - {{ course.name }}</a></li>
         {% endfor %}
     </ol>
 </div>
@@ -30,7 +30,7 @@
     {% if user.is_authenticated %}
     <ul>
         {% for review in recent_reviews %}
-        <li>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author }}{% endif %} reviewed {{ review.reviewed_class }} at {{ review.timestamp }}</li>
+        <li>{% if review.is_anonymous %}Anonymous{% else %}{{ review.author }}{% endif %} reviewed <a href="{% url course review.reviewed_class.course.pk %}#review-{{ review.pk }}">{{ review.reviewed_class }}</a> at {{ review.timestamp }}</li>
         {% endfor %}
     </ul>
     <a href="">Write a review!</a>
