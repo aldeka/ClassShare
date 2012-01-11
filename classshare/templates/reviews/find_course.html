@@ -5,7 +5,7 @@
 
 {% block js %}
     {{ block.super }}
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+    <script src="{{ STATIC_PREFIX }}js/jquery-ui.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/isotope.js"></script>
     <script>
   $(document).ready(function() {
@@ -62,7 +62,7 @@
 
 <ul id="course-list">
     {% for course in courses %}
-    <li class="course dept-{{ course.department.abb }} {% for tag in course.class_set.review_set.tag_set.all %}tag-{{ tag.name }} {% endfor %}{% if course.class_set.review_set.all.length > 0 %}is-reviewed{% endif %}">
+    <li class="course dept-{{ course.department.abb }} {% for tag in course.tags %}tag-{{ tag.name }} {% endfor %}{% if course.review_count > 0 %}is-reviewed{% endif %}">
       <div class="course-header">
 	      <div class="course-title"><a href="{% url course course.pk %}">{{ course.course_code }}:  {{ course.name }}</a></div>
 	      &nbsp;

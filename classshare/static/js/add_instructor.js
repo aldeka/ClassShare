@@ -6,11 +6,13 @@ $(document).ready(function() {
     $('#add-instructor').click(function() {
 	if ($(this).hasClass('add-another')) {
 	    $('#id_instructor').replaceWith(instructor_text);
-	    $(this).find('img').replaceWith(remove_icon)
+	    $(this).find('img').replaceWith(remove_icon);
+	    $('#new-instructor').attr('value', 'True');
 	}
 	else {
 	    $('#id_instructor').replaceWith(instructor_select);
 	    $(this).find('img').replaceWith(add_icon);
+	    $('#new-instructor').attr('value', 'False');
 	}
 	$(this).toggleClass('add-another remove-another');
     });

@@ -8,10 +8,10 @@
         
         {% block css %}
         <link href="{{ STATIC_PREFIX }}css/base-style.css" rel="stylesheet" type="text/css" />
-	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>        
+	<link href="{{ STATIC_PREFIX }}css/jquery-ui.css" rel="stylesheet" type="text/css"/>        
 	    {% endblock %}
 	    {% block js %}
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_PREFIX }}js/jquery.min.js"></script>
         {% endblock %}
 
 	{% block title %}

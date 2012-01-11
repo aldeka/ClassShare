@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login as auth_login
 from django.contrib import messages
+from django.db.models import Count
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from reviews.models import *
@@ -23,7 +24,7 @@ def secure_required(view_func):
 
 
 def home(request):
-    most_reviewed_courses = Course.objects.all()
+    most_reviewed_courses = Course.objects.annotate(num_reviews=Count('class__review')).order_by('-num_reviews').filter(num_reviews__gt=0)[:5]
     recent_reviews = Review.objects.all().order_by('-timestamp')[:5]
     return render(request, 'index.html', {'recent_reviews' : recent_reviews, 'most_reviewed_courses' : most_reviewed_courses })
 
@@ -99,10 +100,13 @@ def choose_class_to_review(request, course_id):
     course = Course.objects.get(pk=course_id)
     if request.method == "POST":
         # Is there a better way to do this?
-        instructor, created = Instructor.objects.get_or_create(name = request.POST["instructor"])
-        data = copy.copy(request.POST)
-        data["instructor"] = instructor.pk
-        form = ClassForm(data)
+        if request.POST["new-instructor"] == "True":
+            instructor, created = Instructor.objects.get_or_create(name = request.POST["instructor"])
+            data = copy.copy(request.POST)
+            data["instructor"] = instructor.pk
+            form = ClassForm(data)
+        else:
+            form = ClassForm(request.POST)
         if form.is_valid():
             cls, created = Class.objects.get_or_create(
                 course = form.cleaned_data["course"],
@@ -113,8 +117,7 @@ def choose_class_to_review(request, course_id):
                 messages.success(request, "Added new class: %s" % cls)
             return redirect("review_course", cls.id)
     else:
-        # TODO: Restrict instructor options to those who have taught the course.
-        # TODO: Allow users to add an instructor from this page
+        # TODO(optional, low-priority): Restrict instructor options to those who have taught the course.
         form = ClassForm(initial={'course': course})
     return render(request, 'reviews/choose_class_form.html', {'form': form, 'course': course})
 
