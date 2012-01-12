@@ -7,6 +7,7 @@ from django.contrib import messages
 from django.db.models import Count
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import simplejson
 from reviews.models import *
 import copy
 import re
@@ -126,6 +127,7 @@ def choose_class_to_review(request, course_id):
 def review_course(request, class_id):
     reviewed_class = get_object_or_404(Class, pk=class_id)
     course = reviewed_class.course
+    tag_list = simplejson.dumps([tag.name for tag in Tag.objects.all()])
     if request.method =="POST":
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -143,7 +145,7 @@ def review_course(request, class_id):
         form = ReviewForm(initial={'author': request.user, 'reviewed_class': reviewed_class})
     # May also want to pass forward list of all tags for autocomplete
     return render(request, 'reviews/review_form.html',
-                  {'form': form, 'class': reviewed_class, 'is_new_review' : True })
+                  {'form': form, 'class': reviewed_class, 'is_new_review' : True, 'tags': tag_list })
 
 def add_tags(review, tag_list):
     for tag_string in tag_list:

@@ -4,6 +4,18 @@
 {{ block.super }}
 <link href="{{ STATIC_PREFIX }}css/review-form.css" rel="stylesheet" type="text/css" />
 {% endblock css %}
+{% block js %}
+{{ block.super }}
+<script type = "text/javascript" src="{{ STATIC_PREFIX }}js/jquery.autocomplete.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $('#id_tags').autocomplete({{ tags|safe }}, {
+        // Allow multiple entries. Comma is default separator.
+	multiple: true,
+    });
+});
+</script>
+{% endblock js %}
 
 {% block content %}
 <h2>{% if is_new_review %}Add{% else %}Edit{% endif %} review of {{ class.course.course_code }}</h2>
