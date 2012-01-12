@@ -124,63 +124,55 @@ def choose_class_to_review(request, course_id):
 
 
 @login_required
-def review_course(request, class_id):
+def review_course(request, class_id, review_id=None):
+    if review_id is not None:
+        review = get_object_or_404(Review, pk=review_id)
+    else:
+        review = None
     reviewed_class = get_object_or_404(Class, pk=class_id)
     course = reviewed_class.course
-    tag_list = simplejson.dumps([tag.name for tag in Tag.objects.all()])
+    all_tags = simplejson.dumps([tag.name for tag in Tag.objects.all()])
+    # Save or delete review
     if request.method =="POST":
-        form = ReviewForm(request.POST)
-        if form.is_valid():
-            review, created = Review.objects.get_or_create(
-                author = form.cleaned_data["author"],
-                reviewed_class = form.cleaned_data["reviewed_class"],
-                content = form.cleaned_data["content"],
-                is_anonymous = form.cleaned_data["is_anonymous"],
-                thumbs_up = form.cleaned_data["thumbs_up"])
-            add_tags(review, form.cleaned_data["tags"])
-            course_id = review.reviewed_class.course.id
-            messages.success(request, "Added new review for %s" % course)
-            return redirect("course", course_id)
+        if not review: # New review
+            form = ReviewForm(request.POST)
+            if form.is_valid():
+                review, created = Review.objects.get_or_create(
+                    author = form.cleaned_data["author"],
+                    reviewed_class = form.cleaned_data["reviewed_class"],
+                    content = form.cleaned_data["content"],
+                    is_anonymous = form.cleaned_data["is_anonymous"],
+                    thumbs_up = form.cleaned_data["thumbs_up"])
+                add_tags(review, form.cleaned_data["tags"])
+                messages.success(request, "Added new review for %s" % course)
+        else: # Existing review
+            if not request.user == review.author:
+                return HttpResponseForbidden()
+            if 'save' in request.POST:
+                form = ReviewForm(request.POST, instance=review)
+                if form.is_valid():
+                    review = form.save()
+                    add_tags(review, form.cleaned_data["tags"])
+                    messages.success(request, "Review updated.")
+            elif 'delete' in request.POST:
+                review.delete()
+                messages.success(request, "Review deleted.")
+        return redirect("course", course.id)
+    # Open review for editing
+    elif review and request.user == review.author:
+        tag_string = ', '.join(tag.name for tag in Tag.objects.filter(reviews=review))
+        form = ReviewForm(instance=review, initial={'tags': tag_string})
+    # New review form
     else:
         form = ReviewForm(initial={'author': request.user, 'reviewed_class': reviewed_class})
-    # May also want to pass forward list of all tags for autocomplete
     return render(request, 'reviews/review_form.html',
-                  {'form': form, 'class': reviewed_class, 'is_new_review' : True, 'tags': tag_list })
+                  {'form': form, 'class': reviewed_class, 'review_id': review_id, 'tags': all_tags })
 
 def add_tags(review, tag_list):
     for tag_string in tag_list:
         tag, created = Tag.objects.get_or_create(name=tag_string)
         if review not in tag.reviews.all():
             tag.reviews.add(review)
-
-    
-@login_required
-def edit_review(request, class_id, review_id):
-    review = get_object_or_404(Review, pk=review_id)
-    reviewed_class = review.reviewed_class
-    course = reviewed_class.course
-    if request.method =="POST":
-        if not request.user == review.author:
-            return HttpResponseForbidden()
-        if 'save' in request.POST:
-            form = ReviewForm(request.POST, instance=review)
-            if form.is_valid():
-                review = form.save()
-                add_tags(review, form.cleaned_data["tags"])
-                messages.success(request, "Review updated.")
-        elif 'delete' in request.POST:
-            review.delete()
-            messages.success(request, "Review deleted.")
-        return redirect("course", course.id)
-    elif request.user == review.author:
-        # take them to the edit form
-        tag_list = Tag.objects.filter(reviews=review) # Does this filter work?
-        tag_string = ', '.join(tag.name for tag in tag_list)
-        form = ReviewForm(instance=review, initial={'tags': tag_string})
-        return render(request, 'reviews/review_form.html',
-                      {'form': form, 'class' : reviewed_class, 'review_id': review_id, 'is_new_review' : False })
-    else:
-        return HttpResponseForbidden()
 
 @login_required
 def find_course(request):

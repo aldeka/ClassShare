@@ -13,7 +13,7 @@ urlpatterns = patterns('reviews.views',
     url(r'^courses/(?P<course_id>\d+)/$', 'course', name="course"),
     url(r'^courses/(?P<course_id>\d+)/choose_class/$', 'choose_class_to_review', name='choose_class'),
     url(r'^courses/(?P<class_id>\d+)/review/$', 'review_course', name="review_course"),
-    url(r'^courses/(?P<class_id>\d+)/review/(?P<review_id>\d+)/edit/$', 'edit_review', name="edit_review"),
+    url(r'^courses/(?P<class_id>\d+)/review/(?P<review_id>\d+)/edit/$', 'review_course', name="edit_review"),
     url(r'^courses/(?P<course_id>\d+)/edit/$', 'edit_course', name="edit_course"),                       
     
     url(r'^depts/$', 'departments', name='departments'),  

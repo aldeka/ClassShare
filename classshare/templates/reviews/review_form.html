@@ -19,11 +19,11 @@ $(document).ready(function() {
 
 {% block content %}
 <h2>{% if is_new_review %}Add{% else %}Edit{% endif %} review of {{ class.course.course_code }}</h2>
-<form method="post" action="{% if is_new_review %}{% url review_course class.id %}{% else %}{% url edit_review class.id review_id %}{% endif %}">
+<form method="post" action="{% if review_id %}{% url edit_review class.id review_id %}{% else %}{% url review_course class.id %}{% endif %}">
     {% csrf_token %}
     {{ form }}
 <div class="clearer">&nbsp;</div>
-    <input type="submit" name="save" value="Save" class="button happy-button"></input> {% if not is_new_review %}<input type="submit" name="delete" value="Delete" class="button danger-button"></input>{% endif %}
+    <input type="submit" name="save" value="Save" class="button happy-button"></input> {% if review_id %}<input type="submit" name="delete" value="Delete" class="button danger-button"></input>{% else %}<a href="{% url course class.course.id %}">Cancel</a>{% endif %}
 </form>
 
 <div class="clearer"></div>
