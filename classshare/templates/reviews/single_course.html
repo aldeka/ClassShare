@@ -21,6 +21,12 @@
     <a href="{% url reviews.views.instructor instructor.pk %}">{{ instructor.name }}</a>&nbsp;
   {% endfor %}<br/>
 {% endif %}
+{% if course.tags %}
+<span class="detail-label">Tags: </span>
+  {% for tag in course.tags %}
+    <a href="{% url tag tag.name %}">{{ tag.name }}</a>&nbsp;
+  {% endfor %}<br/>
+{% endif %}
 <span class="detail-label">Description:</span> {{ course.description|linebreaksbr }}<br/>
 <span class="detail-label">{{ course.thumbs_count }} <img src="{{ STATIC_PREFIX }}img/Thumbs-up-icon.png" height="30" /></span>
 </div>
