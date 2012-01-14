@@ -12,6 +12,8 @@ from reviews.models import *
 import copy
 import re
 
+COURSE_CODE_RE = re.compile('^([a-zA-Z]+[\s,-/&]*[a-zA-Z]+)\s+([0-9]+[0-9a-zA-Z-]*)')
+
 def secure_required(view_func):
     """Decorator makes sure URL is accessed over https."""
     def _wrapped_view_func(request, *args, **kwargs):
@@ -29,27 +31,28 @@ def home(request):
     recent_reviews = Review.objects.all().order_by('-timestamp')[:5]
     return render(request, 'index.html', {'recent_reviews' : recent_reviews, 'most_reviewed_courses' : most_reviewed_courses })
 
+
 @login_required
-def add_or_review_course(request):
-    '''handles the front-page form to add a new course or review an existing (autocompleted) course'''
-    if request.method == "POST":
-        course_stub = request.POST.__getitem__('course-stub')
-        # TODO: we should probably do an initial match to make sure that the input is parseable
-        stub_dept = re.search('^([a-zA-Z]+)', course_stub).group(0).upper()
-        stub_classnum = re.search('[\ ]*([0-9]+[0-9a-zA-Z.\-]*)', course_stub).group(1)
-        # check if this course already exists in database
-        matching_courses = Course.objects.filter(department = stub_dept, number=stub_classnum)
+def search(request):
+    """Currently supports searches in the form '[department abbreviation] [course number]'."""
+    query = request.GET["q"]
+    course_code = COURSE_CODE_RE.match(query)
+    if course_code is not None:
+        dept = course_code.group(1).upper()
+        class_num = course_code.group(2)
+        # check if this course already exists
+        matching_courses = Course.objects.filter(department = dept, number = class_num)
         if matching_courses:
             if len(matching_courses) == 1:
-            # if there's a unique match
+                # if there's a unique match
                 course_id = matching_courses[0].pk
-                return redirect("choose_class", course_id=course_id)
+                return redirect("course", course_id)
             else:
-            # go to intermediate page where you choose which course you mean to edit
+                # choose which course you mean to edit/review
                 return choose_course_to_review(request, matching_courses)
-        # if not, add a new course
-        else:
-            return redirect("add_course")
+    # Otherwise, go to add course page
+    messages.info(request, "No courses matching '%s'.  Would you like to add a new course?" % query)
+    return redirect("add_course")
         
 
 @login_required

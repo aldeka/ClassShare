@@ -74,6 +74,7 @@ h1 {
     width: 100%;
     background: #C2D0D9;#ddd;#ADCCF9;
     font-size: 1.2em;
+    display: inline-block;
 }
 
 #nav li {
@@ -83,6 +84,10 @@ h1 {
     padding: 7px 15px 8px 15px;
     margin: 6px 0 0 10px;
     background: #f6f6f6;
+}
+
+#nav li.search {
+    float: right;
 }
 
 #nav a:hover li, a:active li {
@@ -191,15 +196,14 @@ ul.messages li {
     margin: 0 0 3px 0;
     border-bottom: 1px solid #ddd;
     color: #666;
-    background: #ffc;
+    background: #ffc url(../img/icon_success.gif) no-repeat;
 }
 
-ul.messages li.warning{
-    /* TODO: Choose a color */
-    background-image: url(../img/admin/icon_alert.gif);
+ul.messages li.warning {
+    background-image: url(../img/icon_alert.gif);
 }
 
-ul.messages li.error{
-    /* TODO: Choose a color */
-    background-image: url(../img/admin/icon_error.gif);
+ul.messages li.error {
+    color: red;
+    background-image: url(../img/icon_error.gif);
 }
