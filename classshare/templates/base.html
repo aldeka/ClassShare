@@ -35,9 +35,9 @@
                 </div>
             </div>
             <ul id="nav">
-                <a href="{% url home %}"><li>Home</li></a>
-                <a href="{% url find_course %}"><li>Find a class</li></a>
-                <a href="{% url courses %}"><li>Write a review</li></a>
+                <li><a href="{% url home %}">Home</a></li>
+                <li><a href="{% url find_course %}">Find a class</a></li>
+                <li><a href="{% url courses %}">Write a review</a></li>
 		<li class="search">
 		  <form method="GET" action="{% url search %}">
 		    <input name="q" type="text"/>

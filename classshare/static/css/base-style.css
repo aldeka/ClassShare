@@ -68,29 +68,42 @@ h1 {
 }
 
 #nav {
-    padding: 0;
+    padding: 6px 10px;
+    box-sizing: border-box; /* Padding subtracts from width */
     margin: 0;
-    height: 50px;
     width: 100%;
     background: #C2D0D9;#ddd;#ADCCF9;
-    font-size: 1.2em;
     display: inline-block;
 }
 
-#nav li {
+#nav a {
+    font-size: 1.2em;
+    padding: 8px 15px;
+    background: #f6f6f6;
     display: block;
+}
+
+#nav li {
     float: left;
     list-style-type: none;
-    padding: 7px 15px 8px 15px;
-    margin: 6px 0 0 10px;
-    background: #f6f6f6;
+    margin-left: 10px;
+}
+
+#nav li:first-child {
+    margin-left: 0;
 }
 
 #nav li.search {
     float: right;
 }
 
-#nav a:hover li, a:active li {
+#nav li.search input[type="submit"] {
+    font-size: 1.2em;
+    margin: 0;
+    padding: 6px 15px;
+}
+
+#nav a:hover, a:active {
     background: #fff;
     color: #E6602B;
 }
