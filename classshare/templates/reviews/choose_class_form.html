@@ -11,24 +11,28 @@
     {{ form.non_field_errors }}
     <div class="form-field">
       {{ form.year.errors }}
-      <label for="id_year">Year:</label>
+      {{ form.year.label_tag }}
       {{ form.year }}
     </div>
     <div class="form-field">
       {{ form.semester.errors }}
-      <label for="id_semester">Semester:</label>
+      {{ form.semester.label_tag }}
       {{ form.semester }}
     </div>
     <div class="form-field">
       {{ form.instructor.errors }}
-      <label for="id_instructor">Instructor:</label>
+      {{ form.instructor.label_tag }}
       {{ form.instructor }}
       <a href="#" class="add-another" id="add-instructor">
 	<img src="{{ STATIC_PREFIX }}img/icon_addlink.gif" title="Add Instructor" alt="Add Instructor"/>
       </a>
       <input type="hidden" name="new-instructor" id="new-instructor" value="False"/>
     </div>
-    <input type="hidden" name="course" value="{{ course.pk }}" id="id_course" />
-    <input type="submit" class="button" value="Next" />
+    <div class="form-field">
+      {{ form.course }}
+    </div>
+    <div>
+        <input type="submit" class="button" value="Next" />
+    </div>
 </form>
 {% endblock content %}

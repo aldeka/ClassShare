@@ -3,8 +3,9 @@
 {% block content %}
 <h2>Add course:</h2>
 <form method="post" action="{% url add_course %}">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" class="button happy-button" value="Enter"></input>
+    {% include "reviews/basic_form.html" %}
+    <div>
+        <input type="submit" class="button happy-button" value="Save"></input>
+    </div>
 </form>
 {% endblock content %}

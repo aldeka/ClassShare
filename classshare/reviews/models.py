@@ -104,9 +104,13 @@ def get_courses(department=None, instructor=None, semester=None, tags=[],
 
         
 class CourseForm(forms.ModelForm):
+    department = forms.ModelChoiceField(queryset=Department.objects.all())
+    name = forms.CharField(widget=forms.TextInput(attrs={'class':'wide'}))
+    description = forms.CharField(widget=forms.Textarea(attrs={'class':'wide'}))
+    
     class Meta:
         model = Course
-        fields = ('department','number','name','description')
+        fields = ('department','number', 'units', 'name', 'description')
 
 
 class Class(models.Model):
@@ -200,6 +204,9 @@ class ReviewForm(forms.ModelForm):
     # TODO: Look up how to set user for form to current user.
     # http://stackoverflow.com/questions/291945/how-do-i-filter-foreignkey-choices-in-a-django-modelform
     author = forms.ModelChoiceField(queryset=User.objects.all(), widget=forms.HiddenInput())
-    tags = MultiStringField()
+    reviewed_class = forms.ModelChoiceField(queryset=Class.objects.all(), widget=forms.Select(attrs={'class':'wide'}))
+    content = forms.CharField(widget=forms.Textarea(attrs={'class':'wide'}))
+    tags = MultiStringField(widget=forms.TextInput(attrs={'class':'wide'}))
+    
     class Meta:
         model = Review

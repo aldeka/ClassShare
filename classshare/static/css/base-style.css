@@ -70,6 +70,7 @@ h1 {
 #nav {
     padding: 6px 10px;
     box-sizing: border-box; /* Padding subtracts from width */
+    -moz-box-sizing: border-box;
     margin: 0;
     width: 100%;
     background: #C2D0D9;#ddd;#ADCCF9;
@@ -97,7 +98,7 @@ h1 {
     float: right;
 }
 
-#nav li.search input[type="submit"] {
+#nav input[type="submit"] {
     font-size: 1.2em;
     margin: 0;
     padding: 6px 15px;
@@ -165,9 +166,48 @@ h1 {
     
 /* form things */
 
-input[type="submit"], button {
+#content label {
+    width: 7em;
+    display: inline-block;
+    font-weight: bold;
+    text-align: right;
+    vertical-align: top;
+    padding-top: 0.2em;
+}
+
+
+.form-field {
+    margin-bottom: 0.5em;
+}
+
+#content input, #content select, #content textarea {
+    width: 7em;
+}
+
+/* For form elements which shouldn't be wide, e.g. course numbers. */
+#content *.wide {
+    width: 25em;
+}
+
+#login input[type="text"], #login input[type="password"] {
+    width: 10em;
+}
+
+#content input[type="checkbox"] {
+    width: auto;
+}
+
+
+#content input[type="submit"], #content button {
     font-size: 1.3em;
     padding: 8px 15px;
+    width: auto;
+}
+
+/* Submit button divs */
+#content form div:last-child {
+    padding-left: 2px;
+    margin-left: 7em; 
 }
 
 .button {

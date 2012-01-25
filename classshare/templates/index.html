@@ -35,22 +35,16 @@
     </ul>
     <a href="">Write a review!</a>
     {% else %}
-        {% if form.errors %}
-            <p>Your username and password didn't match, please try again.</p>
-        {% endif %}
-        <form method="post" action="/login/">{% csrf_token %}
-	    <p>
-                <label for="id_username">Username:</label>
-                <input id="id_username" type="text" name="username" maxlength="30" />
-            </p>
-            <p>
-                <label for="id_password">Password:</label>
-                <input type="password" name="password" id="id_password" />
-            </p>
-            <input type="hidden" name="next" value="/" />
-            <input type="submit" value="login" />
-        </form>
-	<a href="https://www.ischool.berkeley.edu/user/password" target="_blank">Forgot your password?</a>
+      <form id="login" method="post" action="/login/">
+        {% include "reviews/basic_form.html" %}
+	<div class="form-field">
+	  <input type="hidden" name="next" value="/" />
+        </div>	
+	<div class="form-field">
+          <input type="submit" value="login" />
+        </div>
+      </form>
+      <a href="https://www.ischool.berkeley.edu/user/password" target="_blank">Forgot your password?</a>
     {% endif %}
 </div>
 </div>

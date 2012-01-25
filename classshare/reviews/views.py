@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import login as auth_login
 from django.contrib import messages
@@ -29,7 +30,9 @@ def secure_required(view_func):
 def home(request):
     most_reviewed_courses = Course.objects.annotate(num_reviews=Count('class__review')).order_by('-num_reviews').filter(num_reviews__gt=0)[:5]
     recent_reviews = Review.objects.all().order_by('-timestamp')[:5]
-    return render(request, 'index.html', {'recent_reviews' : recent_reviews, 'most_reviewed_courses' : most_reviewed_courses })
+    form = AuthenticationForm(request)
+    context = {'recent_reviews' : recent_reviews, 'most_reviewed_courses' : most_reviewed_courses, 'form': form }
+    return render(request, 'index.html', context)
 
 
 @login_required
